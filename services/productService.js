@@ -37,11 +37,10 @@ export const getProductById = async(id) => {
 
 export const postProduct = async(req) => {
     try{
-        const { code, name, description, presentation, units_x_mix, materials, status } = req.body;
+        const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, status } = req.body;
 
         const { 
                 materialscalc,
-                boxes_x_mix, 
                 total_qty_x_mix,
                 total_cost_x_mix,
                 total_cost_unit_x_mix,
@@ -51,6 +50,7 @@ export const postProduct = async(req) => {
                 total_cost_x_unit, 
             } = calculations(
             {
+                boxes_x_mix,
                 units_x_mix,
                 materials,
             }
@@ -93,11 +93,10 @@ export const postProduct = async(req) => {
 export const putProduct = async(req) => {
     try{
         const { id } = req.params;
-        const { code, name, description, presentation, units_x_mix, materials, status } = req.body;
+        const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, status } = req.body;
 
         const { 
             materialscalc,
-            boxes_x_mix, 
             total_qty_x_mix,
             total_cost_x_mix,
             total_cost_unit_x_mix,
@@ -107,6 +106,7 @@ export const putProduct = async(req) => {
             total_cost_x_unit, 
         } = calculations(
             {
+                boxes_x_mix,
                 units_x_mix,
                 materials,
             }
