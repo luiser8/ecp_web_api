@@ -1,6 +1,5 @@
 export const calculations = (...values) => {
-    const { units_x_mix, materials } = values[0];
-    const boxes_x_mix = units_x_mix * 0.02610417;
+    const { boxes_x_mix, units_x_mix, materials } = values[0];
     let total_qty_x_mix = 0;
     let total_cost_x_mix = 0;
     let total_cost_unit_x_mix = 0;
@@ -28,7 +27,6 @@ export const calculations = (...values) => {
     });
     return {
         materialscalc: materials,
-        boxes_x_mix, 
         total_qty_x_mix, 
         total_cost_x_mix, 
         total_cost_unit_x_mix, 
