@@ -1,4 +1,5 @@
 import { getProductsAll, getProductById, postProduct, putProduct, delProduct } from '../services/productService.js';
+import { putMaterialCurrentQty } from '../services/materialService.js';
 
 export const getAll = async(_, res) => {
     try{
@@ -27,6 +28,10 @@ export const post = async(req, res) => {
         }
 
         const product = await postProduct(req);
+
+        if(product.materials.length !== 0){
+            await putMaterialCurrentQty(product.materials);
+        }
 
         res.status(201).json(product);
     }catch(error){

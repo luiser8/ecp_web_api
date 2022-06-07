@@ -142,9 +142,9 @@ export const putProduct = async(req) => {
                 _id: id
             };
 
-        await Product.findByIdAndUpdate(id, newProduct, { new: true });
+        const product = await Product.findByIdAndUpdate(id, newProduct, { new: true });
 
-        return newProduct;
+        return product;
 
     }catch(error){
         return error;

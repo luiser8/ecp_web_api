@@ -56,9 +56,9 @@ export const putSupplier = async(req) => {
         }
 
         const newSupplier = { identifier, name, description, email, phone, address, _id: id };
-        await Supplier.findByIdAndUpdate(id, newSupplier, { new: true });
+        const supplier = await Supplier.findByIdAndUpdate(id, newSupplier, { new: true });
 
-        return newSupplier;
+        return supplier;
 
     }catch(error){
         return error;

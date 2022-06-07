@@ -87,9 +87,9 @@ export const putUser = async(req) => {
         const refreshtoken = await signrefresh({'_id': user._id, 'username': username});
 
         const newUser = { role, identifier, firstname, lastname, email, username, password: encryptedPassword, accesstoken, refreshtoken, _id: id };
-        await User.findByIdAndUpdate(id, newUser, { new: true });
+        const user = await User.findByIdAndUpdate(id, newUser, { new: true });
 
-        return newUser;
+        return user;
 
     }catch(error){
         return error;
