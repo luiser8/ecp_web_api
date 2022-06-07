@@ -1,11 +1,11 @@
-import { getMaterialsAll, getMaterialById, postMaterial, putMaterial, delMaterial } from '../services/materialService.js';
+import { getMaterialsAll, getMaterialById, getMaterialSingleById, postMaterial, putMaterial, delMaterial } from '../services/materialService.js';
 import { getUnitById } from '../services/unitService.js';
 import { getSupplierById } from '../services/supplierService.js';
 
 export const getAll = async(_, res) => {
     try{
         const materials = await getMaterialsAll();
-        res.status(200).json(materials)
+        res.status(200).json(materials);
     }catch(error){
         res.status(404).json({error:error.message});
     }
@@ -15,7 +15,26 @@ export const getById = async(req, res) => {
     try{
         const { id } = req.params;
         const material = await getMaterialById(id);
-        res.status(200).json(material)
+        res.status(200).json(material);
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
+
+export const getCurrentQtyById = async(req, res) => {
+    try{
+        let materialQtyError = {};
+        const { id, qty } = req.params;
+        const material = await getMaterialSingleById(id);
+
+        materialQtyError = qty > material.current_amount ? {
+            'msj': 'Quantity not passed',
+            'diference': material.current_amount - qty
+        } : {
+            'msj': 'Quantity ok passed',
+            'diference': material.current_amount - qty
+        };
+        res.status(200).json(materialQtyError);
     }catch(error){
         res.status(404).json({error:error.message});
     }

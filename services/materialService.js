@@ -26,6 +26,15 @@ export const getMaterialById = async(id) => {
     }
 };
 
+export const getMaterialSingleById = async(id) => {
+    try{
+        const material = await Material.findById({_id: id});
+        return material;
+    }catch(error){
+        return error;
+    }
+};
+
 export const postMaterial = async(req) => {
     try{
         const { unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status } = req.body;
@@ -33,7 +42,7 @@ export const postMaterial = async(req) => {
         if (await Material.exists({code})) {
             return `The code ${code} is not repit`;
         }
-        if (!['in stock', 'on order'].includes(status)) {
+        if (!['in stock', 'on order', 'exhausted'].includes(status)) {
             throw Error("Status enum value invalid");
         }
 
@@ -57,15 +66,37 @@ export const putMaterial = async(req) => {
         if (await Material.exists({code})) {
             return `The code ${code} is not repit`;
         }
-        if (!['in stock', 'on order'].includes(status)) {
+        if (!['in stock', 'on order', 'exhausted'].includes(status)) {
             return `Status enum value invalid`;
         }
 
         const newMaterial = { unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status, _id: id };
-        await Material.findByIdAndUpdate(id, newMaterial, { new: true });
+        const material = await Material.findByIdAndUpdate(id, newMaterial, { new: true });
 
-        return newMaterial;
+        return material;
 
+    }catch(error){
+        return error;
+    }
+};
+
+export const putMaterialCurrentQty = async(req) => {
+    try{
+        const materials  = req;
+        materials.map((_, item) => {
+            if (!mongoose.Types.ObjectId.isValid(materials[item].material)) {
+                return `The id ${materials[item].material} is not valid`;
+            }
+            getMaterialSingleById(materials[item].material).then(material => {
+                materials[item].calculations.forEach(cal => {
+                    let newCurrentAmount = material.current_amount - cal.qty_x_mix;
+
+                    Material.findByIdAndUpdate({ _id: material._id },  { current_amount: newCurrentAmount }, { new: true }, function(error, result){
+                        return result ? result : error;
+                    });
+                });
+            });
+        });
     }catch(error){
         return error;
     }

@@ -52,9 +52,9 @@ export const putUnit = async(req) => {
         }
 
         const newUnit = { code, name, _id: id };
-        await Unit.findByIdAndUpdate(id, newUnit, { new: true });
+        const unit = await Unit.findByIdAndUpdate(id, newUnit, { new: true });
 
-        return newUnit;
+        return unit;
 
     }catch(error){
         return error;
