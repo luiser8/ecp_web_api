@@ -48,6 +48,10 @@ export const put = async(req, res) => {
 
         const product = await putProduct(req);
 
+        if(product.materials.length !== 0){
+            await putMaterialCurrentQty(req.body.materials);
+        }
+
         res.status(201).json(product);
     }catch(error){
         res.status(409).json({error:error.message});
