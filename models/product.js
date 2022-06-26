@@ -7,6 +7,9 @@ const productSchema = mongoose.Schema({
     presentation: {type: String, required: false, max: 255},
     boxes_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
     units_x_mix: {type: Number, required: true},
+    margin_of_gain: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    pvp_x_boxes: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    pvp_x_units: {type: Number, required: false, set(v) { return v.toFixed(2); },},
     materials: [
         {
             material: {
@@ -27,13 +30,13 @@ const productSchema = mongoose.Schema({
             ]
         }
     ],
-    total_qty_x_mix : {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_cost_x_mix : {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_cost_unit_x_mix : {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_qty_x_box : {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_cost_x_box : {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_qty_x_unit : {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_cost_x_unit : {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    total_qty_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    total_cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    total_cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    total_qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    total_cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
     status: {type: String, required: true, enum: ['in process', 'finished', 'slow']}
 },{timestamps:true});
 
