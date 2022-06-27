@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import '../config/database.js';
+import { qrCodeHelper } from '../helpers/qrCodeHelper.js';
 import Material from '../models/material.js';
 import Supplier from '../models/supplier.js';
 import Unit from '../models/unit.js';
@@ -37,7 +38,7 @@ export const getMaterialSingleById = async(id) => {
 
 export const postMaterial = async(req) => {
     try{
-        const { unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status } = req.body;
+        const { category, unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, expiration_date, status } = req.body;
 
         if (await Material.exists({code})) {
             return `The code ${code} is not repit`;
@@ -46,7 +47,7 @@ export const postMaterial = async(req) => {
             throw Error("Status enum value invalid");
         }
 
-        const material = await Material.create({unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status});
+        const material = await Material.create({category, unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, expiration_date, status});
 
         return await material.save();
         
@@ -58,7 +59,7 @@ export const postMaterial = async(req) => {
 export const putMaterial = async(req) => {
     try{
         const { id } = req.params;
-        const { unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status } = req.body;
+        const { category, unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, expiration_date, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
@@ -70,7 +71,7 @@ export const putMaterial = async(req) => {
             return `Status enum value invalid`;
         }
 
-        const newMaterial = { unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status, _id: id };
+        const newMaterial = { category, unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, expiration_date, status, _id: id };
         const material = await Material.findByIdAndUpdate(id, newMaterial, { new: true });
 
         return material;

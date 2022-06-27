@@ -2,9 +2,11 @@ import mongoose from 'mongoose';
 
 const productSchema = mongoose.Schema({
     code: {type: String, unique: true, required: false},
+    qr_code: {type: String, required: false},
     name: {type: String, required: false, max: 155},
     description: {type: String, required: false, max: 155},
     presentation: {type: String, required: false, max: 255},
+    image: {type: String, required: false},
     boxes_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
     units_x_mix: {type: Number, required: true},
     margin_of_gain: {type: Number, required: false, set(v) { return v.toFixed(2); },},
