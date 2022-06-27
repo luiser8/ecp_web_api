@@ -5,6 +5,7 @@ import Product from '../models/product.js';
 import Unit from '../models/unit.js';
 import { calculations } from '../middleware/calculations.js';
 import { checkNotRepitMaterial } from '../helpers/checkHelper.js';
+import { qrCodeHelper } from '../helpers/qrCodeHelper.js';
 
 export const getProductsAll = async () => {
     try {
@@ -68,9 +69,12 @@ export const postProduct = async (req) => {
             return `Status enum value invalid`;
         }
 
+        const qr_code = await qrCodeHelper(code);
+
         const product = await Product.create(
             {
                 code,
+                qr_code,
                 name,
                 description,
                 presentation,

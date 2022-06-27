@@ -42,8 +42,8 @@ export const getCurrentQtyById = async(req, res) => {
 
 export const post = async(req, res) => {
     try{
-        const { unit, supplier, code, name, description, entered_amount, status } = req.body;
-        if (!(unit, code, name, description, entered_amount, status)) {
+        const { category, unit, supplier, code, name, description, entered_amount, expiration_date, status } = req.body;
+        if (!(category, unit, code, name, description, entered_amount, expiration_date, status)) {
             return res.status(400).send("All input is required");
         }
 
