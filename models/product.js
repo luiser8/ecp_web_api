@@ -32,13 +32,79 @@ const productSchema = mongoose.Schema({
             ]
         }
     ],
-    total_qty_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-    total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+    packing_kits: [
+        {
+            packing_kit: {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: "Packing_kit", 
+                require: false
+            },
+            calculations: [
+                {
+                    qty_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(4); }},
+                    qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                }
+            ]
+        }
+    ],
+    others_expenses: [
+        {
+            other_expenses: {
+                type: mongoose.Schema.Types.ObjectId, 
+                ref: "Other_expenses", 
+                require: false
+            },
+            calculations: [
+                {
+                    qty_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(4); }},
+                    qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                }
+            ]
+        }
+    ],
+    total_x_materials: [
+        {
+            total_qty_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+        }
+    ],
+    total_x_packing_kits: [
+        {
+            total_qty_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+        }
+    ],
+    total_x_others_expenses: [
+        {
+            total_qty_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+        }
+    ],
     status: {type: String, required: true, enum: ['in process', 'finished', 'slow']}
 },{timestamps:true});
 

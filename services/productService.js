@@ -81,13 +81,15 @@ export const postProduct = async (req) => {
                 boxes_x_mix,
                 units_x_mix,
                 materials: materialscalc,
-                total_qty_x_mix,
-                total_cost_x_mix,
-                total_cost_unit_x_mix,
-                total_qty_x_box,
-                total_cost_x_box,
-                total_qty_x_unit,
-                total_cost_x_unit,
+                total_x_materials: {
+                    total_qty_x_mix,
+                    total_cost_x_mix,
+                    total_cost_unit_x_mix,
+                    total_qty_x_box,
+                    total_cost_x_box,
+                    total_qty_x_unit,
+                    total_cost_x_unit
+                },
                 status
             }
         );
