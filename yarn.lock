@@ -607,20 +607,20 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
-express-jwt@~7.7.2:
-  version "7.7.2"
-  resolved "https://registry.yarnpkg.com/express-jwt/-/express-jwt-7.7.2.tgz#5f4bc1ec9c4d23dd77ba30974adeb463288f3ab6"
-  integrity sha512-NTNciChI54hnfzOh0XNjfsF6zY4W6t1BE4MfrylYrdlzTipMFzCmUaI4ebUac7e4ZBpai5CwrID661o+TwYsRQ==
+express-jwt@~7.7.5:
+  version "7.7.5"
+  resolved "https://registry.yarnpkg.com/express-jwt/-/express-jwt-7.7.5.tgz#5b46e056be33abdfbcbcb3d8ddc79639e6994508"
+  integrity sha512-2CMse20Ex2vbqvsuGAcai7TgQuvmFa1n39PwKLaEszTGhuRzckBERII4PwdZIibtwfYUGSNVQzPpf+QcGo2yHw==
   dependencies:
     "@types/express-unless" "^0.5.3"
     "@types/jsonwebtoken" "^8.5.8"
-    express-unless "^1.0.0"
+    express-unless "^2.0.2"
     jsonwebtoken "^8.5.1"
 
-express-unless@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/express-unless/-/express-unless-1.0.0.tgz#ecd1c354c5ccf7709a8a17ece617934e037cccd8"
-  integrity sha512-zXSSClWBPfcSYjg0hcQNompkFN/MxQQ53eyrzm9BYgik2ut2I7PxAf2foVqBRMYCwWaZx/aWodi+uk76npdSAw==
+express-unless@^2.0.2:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/express-unless/-/express-unless-2.1.0.tgz#090a56de501130e63b8c1aa708cf0bbf4e9c2320"
+  integrity sha512-666xLp2L3eM1hYhabyZq0HTdedDdcM9QdKsQSROl610VMc2f98KKenc8M3XTPuS/4zpa0QoB8gyDh8K1d8jgDw==
 
 express@^4.18.1:
   version "4.18.1"
@@ -1159,10 +1159,10 @@ moment@^2.29.3:
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.3.tgz#edd47411c322413999f7a5940d526de183c031f3"
   integrity sha512-c6YRvhEo//6T2Jz/vVtYzqBzwvPT95JBQ+smCytzf7c50oMZRsR/a4w88aD34I+/QVSfnoAnSBFPJHItlOMJVw==
 
-mongo-seeding@^3.7.1:
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/mongo-seeding/-/mongo-seeding-3.7.1.tgz#7c647005615660e3355375b30df2f8dde954e9b5"
-  integrity sha512-zPTgL5A20zYnyN1EftinEfOu73aN0vtzhTkdfHgS+cR2ob2pGaXmbJuv/WOewHn1o/4xNAraEBkJ3qXOwiOA7A==
+mongo-seeding@^3.7.2:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/mongo-seeding/-/mongo-seeding-3.7.2.tgz#be34354a572d076a58adb70288540d995cdf808c"
+  integrity sha512-HbkubDo/4ESksMyR8LCsimnJAEqrN0IDMTDi2EsZS7NHuCsiULPWDaOMdF/OYc77PSh36ixv5W+UKTYPW5zBwQ==
   dependencies:
     "@types/mongodb" "^3.6.20"
     bson "^4.5.3"
@@ -1204,10 +1204,10 @@ mongodb@^3.6.4:
   optionalDependencies:
     saslprep "^1.0.0"
 
-mongoose@~6.4.0:
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.4.0.tgz#22d6ab436bdf444b833e92faaa53e47b734c15c6"
-  integrity sha512-eBDrueap1Zx3qFrcYylTiqTFlL5iTEaYAxoDF1MSRdipwAzChQRMJve+vxHtxPhI2q5tmf9RYHfZwXfTUHPd3g==
+mongoose@~6.4.1:
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-6.4.1.tgz#e50e1a92ccf7764f2cc57b5a801a52918c7c3e72"
+  integrity sha512-6a3UmHaC2BYdxZT7qqwORqbxDfAa5HaRMidkA8Ll4Rupnl6R8vRu5Av13jx4DaxgJBpPDo4/K9AXxb+OGSD+5w==
   dependencies:
     bson "^4.6.2"
     kareem "2.4.1"
@@ -1260,10 +1260,10 @@ negotiator@0.6.3:
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.3.tgz#58e323a72fedc0d6f9cd4d31fe49f51479590ccd"
   integrity sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==
 
-nodemon@^2.0.16:
-  version "2.0.16"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.16.tgz#d71b31bfdb226c25de34afea53486c8ef225fdef"
-  integrity sha512-zsrcaOfTWRuUzBn3P44RDliLlp263Z/76FPoHFr3cFFkOz0lTPAcIw8dCzfdVIx/t3AtDYCZRCDkoCojJqaG3w==
+nodemon@^2.0.18:
+  version "2.0.18"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.18.tgz#0f5a3aa7b4587f2626e6f01369deba89cb0462a2"
+  integrity sha512-uAvrKipi2zAz8E7nkSz4qW4F4zd5fs2wNGsTx+xXlP8KXqd9ucE0vY9wankOsPboeDyuUGN9vsXGV1pLn80l/A==
   dependencies:
     chokidar "^3.5.2"
     debug "^3.2.7"
