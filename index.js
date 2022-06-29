@@ -13,6 +13,8 @@ import productRouter from './routes/productRouter.js';
 import materialRouter from './routes/materialRouter.js';
 import supplierRouter from './routes/supplierRouter.js';
 import categoryRouter from './routes/categoryRouter.js';
+import packingKitRouter from './routes/packingKitRouter.js';
+import otherExpensesRouter from './routes/otherExpensesRouter.js';
 
 //Express inicializacion
 var app = express();
@@ -44,6 +46,8 @@ app.use('/api/v1/product/', productRouter);
 app.use('/api/v1/material/', materialRouter);
 app.use('/api/v1/supplier/', supplierRouter);
 app.use('/api/v1/category/', categoryRouter);
+app.use('/api/v1/packingkit/', packingKitRouter);
+app.use('/api/v1/otherexpenses/', otherExpensesRouter);
 app.get('/', (_, res) => {
     res.render('index', { error: false, message:'API ECP web.' })
 });

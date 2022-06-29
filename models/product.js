@@ -36,7 +36,7 @@ const productSchema = mongoose.Schema({
         {
             packing_kit: {
                 type: mongoose.Schema.Types.ObjectId, 
-                ref: "Packing_kit", 
+                ref: "PackingKit", 
                 require: false
             },
             calculations: [
@@ -56,7 +56,7 @@ const productSchema = mongoose.Schema({
         {
             other_expenses: {
                 type: mongoose.Schema.Types.ObjectId, 
-                ref: "Other_expenses", 
+                ref: "OtherExpenses", 
                 require: false
             },
             calculations: [
