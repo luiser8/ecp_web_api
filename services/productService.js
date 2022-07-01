@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
 import '../config/database.js';
 import Material from '../models/material.js';
+import PackingKit from '../models/packing_kit.js';
 import Product from '../models/product.js';
 import Unit from '../models/unit.js';
 import { calculations } from '../middleware/calculations.js';
-import { checkNotRepitMaterial } from '../helpers/checkHelper.js';
+import { checkNotRepitMaterial, checkNotRepitPackingKits } from '../helpers/checkHelper.js';
 import { qrCodeHelper } from '../helpers/qrCodeHelper.js';
+import { calculations_kits } from '../middleware/calculations_kits.js';
 
 export const getProductsAll = async () => {
     try {
@@ -14,6 +16,14 @@ export const getProductsAll = async () => {
                 path: "materials", populate: [
                     {
                         path: "material", model: Material, select: "code name",
+                        populate: { path: "unit", model: Unit, select: "code" }
+                    }
+                ]
+            })
+            .populate({
+                path: "packing_kits", populate: [
+                    {
+                        path: "packing_kit", model: PackingKit, select: "name",
                         populate: { path: "unit", model: Unit, select: "code" }
                     }
                 ]
@@ -34,6 +44,14 @@ export const getProductById = async (id) => {
                         populate: { path: "unit", model: Unit, select: "code" }
                     }
                 ]
+            })
+            .populate({
+                path: "packing_kits", populate: [
+                    {
+                        path: "packing_kit", model: PackingKit, select: "name",
+                        populate: { path: "unit", model: Unit, select: "code" }
+                    }
+                ]
             });
         return product;
     } catch (error) {
@@ -43,17 +61,17 @@ export const getProductById = async (id) => {
 
 export const postProduct = async (req) => {
     try {
-        const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, status } = req.body;
+        const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, packing_kits, status } = req.body;
 
         const {
-            materialscalc,
-            total_qty_x_mix,
-            total_cost_x_mix,
-            total_cost_unit_x_mix,
-            total_qty_x_box,
-            total_cost_x_box,
-            total_qty_x_unit,
-            total_cost_x_unit,
+            materials_calc,
+            total_m_qty_x_mix,
+            total_m_cost_x_mix,
+            total_m_cost_unit_x_mix,
+            total_m_qty_x_box,
+            total_m_cost_x_box,
+            total_m_qty_x_unit,
+            total_m_cost_x_unit,
         } = calculations(
             {
                 boxes_x_mix,
@@ -62,8 +80,22 @@ export const postProduct = async (req) => {
             }
         );
 
+        const {
+            packings_kits_calc,
+            total_pk_cost_unit_x_mix,
+            total_pk_qty_x_box,
+            total_pk_cost_x_box,
+            total_pk_qty_x_unit,
+            total_pk_cost_x_unit,
+        } = calculations_kits(
+            {
+                units_x_mix,
+                packing_kits,
+            }
+        );
+
         if (await Product.exists({ code })) {
-            return `The code ${code} is not repit`;
+            return `The code ${code} no repeat`;
         }
         if (!['in process', 'finished', 'slow'].includes(status)) {
             return `Status enum value invalid`;
@@ -80,15 +112,30 @@ export const postProduct = async (req) => {
                 presentation,
                 boxes_x_mix,
                 units_x_mix,
-                materials: materialscalc,
+                materials: materials_calc,
+                packing_kits: packings_kits_calc,
                 total_x_materials: {
-                    total_qty_x_mix,
-                    total_cost_x_mix,
-                    total_cost_unit_x_mix,
-                    total_qty_x_box,
-                    total_cost_x_box,
-                    total_qty_x_unit,
-                    total_cost_x_unit
+                    total_qty_x_mix: total_m_qty_x_mix,
+                    total_cost_x_mix: total_m_cost_x_mix,
+                    total_cost_unit_x_mix: total_m_cost_unit_x_mix,
+                    total_qty_x_box: total_m_qty_x_box,
+                    total_cost_x_box: total_m_cost_x_box,
+                    total_qty_x_unit: total_m_qty_x_unit,
+                    total_cost_x_unit: total_m_cost_x_unit
+                },
+                total_x_packing_kits: {
+                    total_cost_unit_x_mix: total_pk_cost_unit_x_mix,
+                    total_qty_x_box: total_pk_qty_x_box,
+                    total_cost_x_box: total_pk_cost_x_box,
+                    total_qty_x_unit: total_pk_qty_x_unit,
+                    total_cost_x_unit: total_pk_cost_x_unit
+                },
+                total_x_materials_packing_kits: {
+                    total_cost_unit_x_mix: total_m_cost_unit_x_mix + total_pk_cost_unit_x_mix,
+                    total_qty_x_box: total_m_qty_x_box + total_pk_qty_x_box,
+                    total_cost_x_box: total_m_cost_x_box + total_pk_cost_x_box,
+                    total_qty_x_unit: total_m_qty_x_unit + total_pk_qty_x_unit,
+                    total_cost_x_unit: total_m_cost_x_unit + total_pk_cost_x_unit
                 },
                 status
             }
@@ -104,63 +151,112 @@ export const postProduct = async (req) => {
 export const putProduct = async (req) => {
     try {
         const { id } = req.params;
-        const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, status } = req.body;
+        const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, packing_kits, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
         }
         if (await Product.exists({ code })) {
-            return `The code ${code} is not repit`;
+            return `The code ${code} no repeat`;
         }
         if (!['in process', 'finished', 'slow'].includes(status)) {
             return `Status enum value invalid`;
         }
 
+        let materialsLocal = materials;
         let materialsOld = [];
 
+        let packing_kitsLocal = packing_kits;
+        let packing_kitsOld = [];
+
         await getProductById(id).then(item => {
-            item.materials.forEach(async element => {
-                const checkNotRepit = await checkNotRepitMaterial({
-                    'materialId': element.material._id.toString(),
-                    'materials': materials
+            item.materials.forEach(async element_material => {
+
+                const checkNotRepitM = await checkNotRepitMaterial({
+                    'materialId': element_material.material._id.toString(),
+                    'materials': materialsLocal
                 });
 
-                if (checkNotRepit.error === true) {
-                    console.log('Hay materiales repetidos');
+                if (checkNotRepitM.error === false) {
+                    element_material.calculations.forEach(async cal => {
+                        materialsOld.push(
+                            {
+                                "material": element_material.material._id.toString(),
+                                "calculations": [
+                                    {
+                                        "qty_x_mix": cal.qty_x_mix,
+                                        "cost_x_mix": cal.cost_x_mix
+                                    }
+                                ]
+                            }
+                        );
+                    });
+                    return;
                 }
+                const materialDelete = element_material.material._id.toString();
+                const remove = materialsLocal.filter(m => m.material.toString() !== materialDelete); 
+                materialsLocal = remove;
+            });
+           item.packing_kits.forEach(async element_packing_kit => {
 
-                element.calculations.forEach(async cal => {
-                    materialsOld.push(
-                        {
-                            "material": element.material._id.toString(),
-                            "calculations": [
-                                {
-                                    "qty_x_mix": cal.qty_x_mix,
-                                    "cost_x_mix": cal.cost_x_mix
-                                }
-                            ]
-                        }
-                    );
+                const checkNotRepitPk = await checkNotRepitPackingKits({
+                    'packingKitId': element_packing_kit.packing_kit._id.toString(),
+                    'packingKits': packing_kitsLocal
                 });
+
+                if (checkNotRepitPk.error === false) {
+                    element_packing_kit.calculations.forEach(async cal => {
+                        packing_kitsOld.push(
+                            {
+                                "packing_kit": element_packing_kit.packing_kit._id.toString(),
+                                "calculations": [
+                                    {
+                                        "cost_unit_x_mix": cal.cost_unit_x_mix,
+                                        "qty_x_box": cal.qty_x_box
+                                    }
+                                ]
+                            }
+                        );
+                    });
+                    return;
+                }
+                const packingKitDelete = element_packing_kit.packing_kit._id.toString();
+                const remove = packing_kitsLocal.filter(m => m.packing_kit.toString() !== packingKitDelete); 
+                packing_kitsLocal = remove;
             });
         });
 
-        const newsMaterials = [...materialsOld, ...materials];
+        const newsMaterials = [...materialsOld, ...materialsLocal];
+        const newsPackingKits = [...packing_kitsOld, ...packing_kitsLocal];
 
         const {
-            materialscalc,
-            total_qty_x_mix,
-            total_cost_x_mix,
-            total_cost_unit_x_mix,
-            total_qty_x_box,
-            total_cost_x_box,
-            total_qty_x_unit,
-            total_cost_x_unit,
+            materials_calc,
+            total_m_qty_x_mix,
+            total_m_cost_x_mix,
+            total_m_cost_unit_x_mix,
+            total_m_qty_x_box,
+            total_m_cost_x_box,
+            total_m_qty_x_unit,
+            total_m_cost_x_unit,
         } = calculations(
             {
                 boxes_x_mix,
                 units_x_mix,
                 materials: newsMaterials,
+            }
+        );
+
+        const {
+            packings_kits_calc,
+            total_pk_cost_unit_x_mix,
+            total_pk_qty_x_box,
+            total_pk_cost_x_box,
+            total_pk_qty_x_unit,
+            total_pk_cost_x_unit,
+        } = calculations_kits(
+            {
+                units_x_mix,
+                packing_kits: newsPackingKits,
             }
         );
 
@@ -172,14 +268,31 @@ export const putProduct = async (req) => {
             presentation,
             boxes_x_mix,
             units_x_mix,
-            materials: materialscalc,
-            total_qty_x_mix,
-            total_cost_x_mix,
-            total_cost_unit_x_mix,
-            total_qty_x_box,
-            total_cost_x_box,
-            total_qty_x_unit,
-            total_cost_x_unit,
+            materials: materials_calc,
+            packing_kits: packings_kits_calc,
+            total_x_materials: {
+                total_qty_x_mix: total_m_qty_x_mix,
+                total_cost_x_mix: total_m_cost_x_mix,
+                total_cost_unit_x_mix: total_m_cost_unit_x_mix,
+                total_qty_x_box: total_m_qty_x_box,
+                total_cost_x_box: total_m_cost_x_box,
+                total_qty_x_unit: total_m_qty_x_unit,
+                total_cost_x_unit: total_m_cost_x_unit
+            },
+            total_x_packing_kits: {
+                total_cost_unit_x_mix: total_pk_cost_unit_x_mix,
+                total_qty_x_box: total_pk_qty_x_box,
+                total_cost_x_box: total_pk_cost_x_box,
+                total_qty_x_unit: total_pk_qty_x_unit,
+                total_cost_x_unit: total_pk_cost_x_unit
+            },
+            total_x_materials_packing_kits: {
+                total_cost_unit_x_mix: total_m_cost_unit_x_mix + total_pk_cost_unit_x_mix,
+                total_qty_x_box: total_m_qty_x_box + total_pk_qty_x_box,
+                total_cost_x_box: total_m_cost_x_box + total_pk_cost_x_box,
+                total_qty_x_unit: total_m_qty_x_unit + total_pk_qty_x_unit,
+                total_cost_x_unit: total_m_cost_x_unit + total_pk_cost_x_unit
+            },
             status,
             _id: id
         };
