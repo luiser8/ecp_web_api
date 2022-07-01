@@ -90,7 +90,7 @@ export const putMaterialCurrentQty = async(req) => {
             }
             getMaterialSingleById(materials[item].material).then(material => {
                 materials[item].calculations.forEach(cal => {
-                    let newCurrentAmount = material.current_amount - cal.qty_x_mix;
+                    const newCurrentAmount = material.current_amount - cal.qty_x_mix;
 
                     Material.findByIdAndUpdate({ _id: material._id },  { current_amount: newCurrentAmount }, { new: true }, function(error, result){
                         return result ? result : error;

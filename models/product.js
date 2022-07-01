@@ -25,9 +25,9 @@ const productSchema = mongoose.Schema({
                     cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
                     cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
                     qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); }},
-                    cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(4); }},
-                    qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
-                    cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); }},
+                    cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); }},
                 }
             ]
         }
@@ -45,9 +45,9 @@ const productSchema = mongoose.Schema({
                     cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
                     cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
                     qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); }},
-                    cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(4); }},
-                    qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
-                    cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); }},
+                    cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); }},
                 }
             ]
         }
@@ -65,9 +65,9 @@ const productSchema = mongoose.Schema({
                     cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
                     cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); }},
                     qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); }},
-                    cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(4); }},
-                    qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
-                    cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); }},
+                    qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); }},
+                    cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); }},
                 }
             ]
         }
@@ -79,19 +79,26 @@ const productSchema = mongoose.Schema({
             total_cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
             total_qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
             total_cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); },},
+            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); },},
         }
     ],
     total_x_packing_kits: [
         {
-            total_qty_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-            total_cost_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
             total_cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
             total_qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
             total_cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); },},
+            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); },},
+        }
+    ],
+    total_x_materials_packing_kits: [
+        {
+            total_cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); },},
+            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); },},
         }
     ],
     total_x_others_expenses: [
@@ -101,8 +108,8 @@ const productSchema = mongoose.Schema({
             total_cost_unit_x_mix: {type: Number, required: false, set(v) { return v.toFixed(2); },},
             total_qty_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
             total_cost_x_box: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
-            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(2); },},
+            total_qty_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); },},
+            total_cost_x_unit: {type: Number, required: false, set(v) { return v.toFixed(4); },},
         }
     ],
     status: {type: String, required: true, enum: ['in process', 'finished', 'slow']}
