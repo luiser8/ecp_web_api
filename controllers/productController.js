@@ -1,5 +1,6 @@
 import { getProductsAll, getProductById, postProduct, putProduct, delProduct } from '../services/productService.js';
-import { putMaterialCurrentQty } from '../services/materialService.js';
+import { putMaterialDownCurrentQty } from '../services/materialService.js';
+import { putPackingKitDownCurrentQty } from '../services/packingKitService.js';
 
 export const getAll = async(_, res) => {
     try{
@@ -30,7 +31,11 @@ export const post = async(req, res) => {
         const product = await postProduct(req);
 
         if(product.materials.length !== 0){
-            await putMaterialCurrentQty(product.materials);
+            await putMaterialDownCurrentQty(product.materials);
+        }
+
+        if(product.packing_kits.length !== 0){
+            await putPackingKitDownCurrentQty(product.packing_kits);
         }
 
         res.status(201).json(product);
@@ -49,7 +54,11 @@ export const put = async(req, res) => {
         const product = await putProduct(req);
 
         if(product.materials.length !== 0){
-            await putMaterialCurrentQty(req.body.materials);
+            await putMaterialDownCurrentQty(product.materials);
+        }
+
+        if(product.packing_kits.length !== 0){
+            await putPackingKitDownCurrentQty(product.packing_kits);
         }
 
         res.status(201).json(product);

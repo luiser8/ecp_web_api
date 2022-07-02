@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import '../config/database.js';
-import { qrCodeHelper } from '../helpers/qrCodeHelper.js';
 import Material from '../models/material.js';
 import Supplier from '../models/supplier.js';
 import Unit from '../models/unit.js';
@@ -41,7 +40,7 @@ export const postMaterial = async(req) => {
         const { category, unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, expiration_date, status } = req.body;
 
         if (await Material.exists({code})) {
-            return `The code ${code} is not repit`;
+            return `The code ${code} no repeat`;
         }
         if (!['in stock', 'on order', 'exhausted'].includes(status)) {
             throw Error("Status enum value invalid");
@@ -65,7 +64,7 @@ export const putMaterial = async(req) => {
             return `The id ${id} is not valid`;
         }
         if (await Material.exists({code})) {
-            return `The code ${code} is not repit`;
+            return `The code ${code} no repeat`;
         }
         if (!['in stock', 'on order', 'exhausted'].includes(status)) {
             return `Status enum value invalid`;
@@ -81,7 +80,7 @@ export const putMaterial = async(req) => {
     }
 };
 
-export const putMaterialCurrentQty = async(req) => {
+export const putMaterialDownCurrentQty = async(req) => {
     try{
         const materials  = req;
         materials.map((_, item) => {
@@ -90,7 +89,29 @@ export const putMaterialCurrentQty = async(req) => {
             }
             getMaterialSingleById(materials[item].material).then(material => {
                 materials[item].calculations.forEach(cal => {
-                    const newCurrentAmount = material.current_amount - cal.qty_x_mix;
+                    const newCurrentAmount =  material.current_amount - cal.qty_x_mix;
+
+                    Material.findByIdAndUpdate({ _id: material._id },  { current_amount: newCurrentAmount }, { new: true }, function(error, result){
+                        return result ? result : error;
+                    });
+                });
+            });
+        });
+    }catch(error){
+        return error;
+    }
+};
+
+export const putMaterialUpCurrentQty = async(req) => {
+    try{
+        const materials  = req;
+        materials.map((_, item) => {
+            if (!mongoose.Types.ObjectId.isValid(materials[item].material)) {
+                return `The id ${materials[item].material} is not valid`;
+            }
+            getMaterialSingleById(materials[item].material).then(material => {
+                materials[item].calculations.forEach(cal => {
+                    const newCurrentAmount =  material.current_amount + cal.qty_x_mix;
 
                     Material.findByIdAndUpdate({ _id: material._id },  { current_amount: newCurrentAmount }, { new: true }, function(error, result){
                         return result ? result : error;

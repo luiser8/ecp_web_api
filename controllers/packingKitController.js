@@ -21,8 +21,8 @@ export const getById = async(req, res) => {
 
 export const post = async(req, res) => {
     try{
-        const { unit, name, description } = req.body;
-        if (!(unit, name, description)) {
+        const { unit, name, description, entered_amount, current_amount, purchase_price } = req.body;
+        if (!(unit, name, description, entered_amount, current_amount, purchase_price)) {
             return res.status(400).send("All input is required");
         }
 

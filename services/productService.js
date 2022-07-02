@@ -8,6 +8,8 @@ import { calculations } from '../middleware/calculations.js';
 import { checkNotRepitMaterial, checkNotRepitPackingKits } from '../helpers/checkHelper.js';
 import { qrCodeHelper } from '../helpers/qrCodeHelper.js';
 import { calculations_kits } from '../middleware/calculations_kits.js';
+import { putMaterialUpCurrentQty } from './materialService.js';
+import { putPackingKitUpCurrentQty } from './packingKitService.js';
 
 export const getProductsAll = async () => {
     try {
@@ -76,7 +78,7 @@ export const postProduct = async (req) => {
             {
                 boxes_x_mix,
                 units_x_mix,
-                materials,
+                materials: materials !== undefined ? materials : [],
             }
         );
 
@@ -90,7 +92,7 @@ export const postProduct = async (req) => {
         } = calculations_kits(
             {
                 units_x_mix,
-                packing_kits,
+                packing_kits: packing_kits !== undefined ? packing_kits : [],
             }
         );
 
@@ -112,9 +114,9 @@ export const postProduct = async (req) => {
                 presentation,
                 boxes_x_mix,
                 units_x_mix,
-                materials: materials_calc,
-                packing_kits: packings_kits_calc,
-                total_x_materials: {
+                materials: materials !== undefined ? materials_calc : materials,
+                packing_kits: packing_kits !== undefined ? packings_kits_calc : packing_kits,
+                total_x_materials: materials !== undefined ? {
                     total_qty_x_mix: total_m_qty_x_mix,
                     total_cost_x_mix: total_m_cost_x_mix,
                     total_cost_unit_x_mix: total_m_cost_unit_x_mix,
@@ -122,21 +124,21 @@ export const postProduct = async (req) => {
                     total_cost_x_box: total_m_cost_x_box,
                     total_qty_x_unit: total_m_qty_x_unit,
                     total_cost_x_unit: total_m_cost_x_unit
-                },
-                total_x_packing_kits: {
+                } : undefined,
+                total_x_packing_kits: packing_kits !== undefined ? {
                     total_cost_unit_x_mix: total_pk_cost_unit_x_mix,
                     total_qty_x_box: total_pk_qty_x_box,
                     total_cost_x_box: total_pk_cost_x_box,
                     total_qty_x_unit: total_pk_qty_x_unit,
                     total_cost_x_unit: total_pk_cost_x_unit
-                },
-                total_x_materials_packing_kits: {
+                } : undefined,
+                total_x_materials_packing_kits: packing_kits !== undefined ? {
                     total_cost_unit_x_mix: total_m_cost_unit_x_mix + total_pk_cost_unit_x_mix,
                     total_qty_x_box: total_m_qty_x_box + total_pk_qty_x_box,
                     total_cost_x_box: total_m_cost_x_box + total_pk_cost_x_box,
                     total_qty_x_unit: total_m_qty_x_unit + total_pk_qty_x_unit,
                     total_cost_x_unit: total_m_cost_x_unit + total_pk_cost_x_unit
-                },
+                } : undefined,
                 status
             }
         );
@@ -163,67 +165,78 @@ export const putProduct = async (req) => {
             return `Status enum value invalid`;
         }
 
-        let materialsLocal = materials;
+        let materialsLocal = materials !== undefined ? materials : [];
         let materialsOld = [];
 
-        let packing_kitsLocal = packing_kits;
+        let packing_kitsLocal = packing_kits !== undefined ? packing_kits : [];
         let packing_kitsOld = [];
 
         await getProductById(id).then(item => {
-            item.materials.forEach(async element_material => {
+            if(materials !== undefined){
+                item.materials.forEach(async element_material => {
 
-                const checkNotRepitM = await checkNotRepitMaterial({
-                    'materialId': element_material.material._id.toString(),
-                    'materials': materialsLocal
-                });
-
-                if (checkNotRepitM.error === false) {
-                    element_material.calculations.forEach(async cal => {
-                        materialsOld.push(
-                            {
-                                "material": element_material.material._id.toString(),
-                                "calculations": [
-                                    {
-                                        "qty_x_mix": cal.qty_x_mix,
-                                        "cost_x_mix": cal.cost_x_mix
-                                    }
-                                ]
-                            }
-                        );
+                    const checkNotRepitM = checkNotRepitMaterial({
+                        'materialId': element_material.material._id.toString(),
+                        'materials': materialsLocal
                     });
-                    return;
-                }
-                const materialDelete = element_material.material._id.toString();
-                const remove = materialsLocal.filter(m => m.material.toString() !== materialDelete); 
-                materialsLocal = remove;
-            });
-           item.packing_kits.forEach(async element_packing_kit => {
 
-                const checkNotRepitPk = await checkNotRepitPackingKits({
-                    'packingKitId': element_packing_kit.packing_kit._id.toString(),
-                    'packingKits': packing_kitsLocal
+                    if (checkNotRepitM.error === false) {
+                        element_material.calculations.forEach(async cal => {
+                            materialsOld.push(
+                                {
+                                    "material": element_material.material._id.toString(),
+                                    "calculations": [
+                                        {
+                                            "qty_x_mix": cal.qty_x_mix,
+                                            "cost_x_mix": cal.cost_x_mix
+                                        }
+                                    ]
+                                }
+                            );
+                        });
+                        return;
+                    }
+                    const materialDelete = element_material.material._id.toString();
+
+                    await putMaterialUpCurrentQty(materialsLocal);
+
+                    const removeMaterial = materialsLocal.filter(m => m.material.toString() !== materialDelete); 
+                    materialsLocal = removeMaterial;
                 });
+            }
 
-                if (checkNotRepitPk.error === false) {
-                    element_packing_kit.calculations.forEach(async cal => {
-                        packing_kitsOld.push(
-                            {
-                                "packing_kit": element_packing_kit.packing_kit._id.toString(),
-                                "calculations": [
-                                    {
-                                        "cost_unit_x_mix": cal.cost_unit_x_mix,
-                                        "qty_x_box": cal.qty_x_box
-                                    }
-                                ]
-                            }
-                        );
+            if(packing_kits !== undefined){
+                item.packing_kits.forEach(async element_packing_kit => {
+
+                    const checkNotRepitPk = checkNotRepitPackingKits({
+                        'packingKitId': element_packing_kit.packing_kit._id.toString(),
+                        'packingKits': packing_kitsLocal
                     });
-                    return;
-                }
-                const packingKitDelete = element_packing_kit.packing_kit._id.toString();
-                const remove = packing_kitsLocal.filter(m => m.packing_kit.toString() !== packingKitDelete); 
-                packing_kitsLocal = remove;
-            });
+
+                    if (checkNotRepitPk.error === false) {
+                        element_packing_kit.calculations.forEach(async cal => {
+                            packing_kitsOld.push(
+                                {
+                                    "packing_kit": element_packing_kit.packing_kit._id.toString(),
+                                    "calculations": [
+                                        {
+                                            "cost_unit_x_mix": cal.cost_unit_x_mix,
+                                            "qty_x_box": cal.qty_x_box
+                                        }
+                                    ]
+                                }
+                            );
+                        });
+                        return;
+                    }
+                    const packingKitDelete = element_packing_kit.packing_kit._id.toString();
+
+                    await putPackingKitUpCurrentQty(packing_kitsLocal);
+
+                    const removePacking_kit = packing_kitsLocal.filter(m => m.packing_kit.toString() !== packingKitDelete); 
+                    packing_kitsLocal = removePacking_kit;
+                });
+            }
         });
 
         const newsMaterials = [...materialsOld, ...materialsLocal];
@@ -268,9 +281,9 @@ export const putProduct = async (req) => {
             presentation,
             boxes_x_mix,
             units_x_mix,
-            materials: materials_calc,
-            packing_kits: packings_kits_calc,
-            total_x_materials: {
+            materials: materials !== undefined ? materials_calc : materials,
+            packing_kits: packing_kits !== undefined ? packings_kits_calc : packing_kits,
+            total_x_materials: materials !== undefined ? {
                 total_qty_x_mix: total_m_qty_x_mix,
                 total_cost_x_mix: total_m_cost_x_mix,
                 total_cost_unit_x_mix: total_m_cost_unit_x_mix,
@@ -278,21 +291,21 @@ export const putProduct = async (req) => {
                 total_cost_x_box: total_m_cost_x_box,
                 total_qty_x_unit: total_m_qty_x_unit,
                 total_cost_x_unit: total_m_cost_x_unit
-            },
-            total_x_packing_kits: {
+            } : undefined,
+            total_x_packing_kits: packing_kits !== undefined ? {
                 total_cost_unit_x_mix: total_pk_cost_unit_x_mix,
                 total_qty_x_box: total_pk_qty_x_box,
                 total_cost_x_box: total_pk_cost_x_box,
                 total_qty_x_unit: total_pk_qty_x_unit,
                 total_cost_x_unit: total_pk_cost_x_unit
-            },
-            total_x_materials_packing_kits: {
+            } : undefined,
+            total_x_materials_packing_kits: packing_kits !== undefined ? {
                 total_cost_unit_x_mix: total_m_cost_unit_x_mix + total_pk_cost_unit_x_mix,
                 total_qty_x_box: total_m_qty_x_box + total_pk_qty_x_box,
                 total_cost_x_box: total_m_cost_x_box + total_pk_cost_x_box,
                 total_qty_x_unit: total_m_qty_x_unit + total_pk_qty_x_unit,
                 total_cost_x_unit: total_m_cost_x_unit + total_pk_cost_x_unit
-            },
+            } : undefined,
             status,
             _id: id
         };
