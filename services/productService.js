@@ -65,6 +65,16 @@ export const postProduct = async (req) => {
     try {
         const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, packing_kits, status } = req.body;
 
+        if (await Product.exists({ code })) {
+            return `The code ${code} no repeat`;
+        }
+
+        if (!['in process', 'finished', 'slow'].includes(status)) {
+            return `Status enum value invalid`;
+        }
+
+        const qr_code = await qrCodeHelper(code);
+
         const {
             materials_calc,
             total_m_qty_x_mix,
@@ -95,15 +105,6 @@ export const postProduct = async (req) => {
                 packing_kits: packing_kits !== undefined ? packing_kits : [],
             }
         );
-
-        if (await Product.exists({ code })) {
-            return `The code ${code} no repeat`;
-        }
-        if (!['in process', 'finished', 'slow'].includes(status)) {
-            return `Status enum value invalid`;
-        }
-
-        const qr_code = await qrCodeHelper(code);
 
         const product = await Product.create(
             {
