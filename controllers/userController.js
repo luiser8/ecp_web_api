@@ -58,9 +58,11 @@ export const login = async(req, res) => {
 
         const user = await loginUser(req);
         if(user === "Invalid Credentials"){
-            res.status(400).send(user);
+            res.status(200).send(user);
+        }else{
+            res.status(200).json(user);
         }
-        res.status(200).json(user);
+
     }catch(error){
         res.status(409).json({error:error.message});
     }
