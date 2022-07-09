@@ -11,26 +11,33 @@ import { calculations_kits } from '../middleware/calculations_kits.js';
 import { putMaterialUpCurrentQty } from './materialService.js';
 import { putPackingKitUpCurrentQty } from './packingKitService.js';
 
+export const getProductsSimpleAll = async () => {
+    try {
+        return await Product.find({}).select('code name presentation status createdAt');
+    } catch (error) {
+        return error;
+    }
+};
+
 export const getProductsAll = async () => {
     try {
-        const products = await Product.find({})
-            .populate({
-                path: "materials", populate: [
-                    {
-                        path: "material", model: Material, select: "code name",
-                        populate: { path: "unit", model: Unit, select: "code" }
-                    }
-                ]
-            })
-            .populate({
-                path: "packing_kits", populate: [
-                    {
-                        path: "packing_kit", model: PackingKit, select: "name",
-                        populate: { path: "unit", model: Unit, select: "code" }
-                    }
-                ]
-            });
-        return products;
+        return await Product.find({})
+        .populate({
+            path: "materials", populate: [
+                {
+                    path: "material", model: Material, select: "code name",
+                    populate: { path: "unit", model: Unit, select: "code" }
+                }
+            ]
+        })
+        .populate({
+            path: "packing_kits", populate: [
+                {
+                    path: "packing_kit", model: PackingKit, select: "name",
+                    populate: { path: "unit", model: Unit, select: "code" }
+                }
+            ]
+        });
     } catch (error) {
         return error;
     }
@@ -38,24 +45,23 @@ export const getProductsAll = async () => {
 
 export const getProductById = async (id) => {
     try {
-        const product = await Product.findById({ _id: id })
-            .populate({
-                path: "materials", populate: [
-                    {
-                        path: "material", model: Material, select: "code name",
-                        populate: { path: "unit", model: Unit, select: "code" }
-                    }
-                ]
-            })
-            .populate({
-                path: "packing_kits", populate: [
-                    {
-                        path: "packing_kit", model: PackingKit, select: "name",
-                        populate: { path: "unit", model: Unit, select: "code" }
-                    }
-                ]
-            });
-        return product;
+        return await Product.findById({ _id: id })
+        .populate({
+            path: "materials", populate: [
+                {
+                    path: "material", model: Material, select: "code name",
+                    populate: { path: "unit", model: Unit, select: "code" }
+                }
+            ]
+        })
+        .populate({
+            path: "packing_kits", populate: [
+                {
+                    path: "packing_kit", model: PackingKit, select: "name",
+                    populate: { path: "unit", model: Unit, select: "code" }
+                }
+            ]
+        });
     } catch (error) {
         return error;
     }
@@ -311,9 +317,7 @@ export const putProduct = async (req) => {
             _id: id
         };
 
-        const product = await Product.findByIdAndUpdate(id, newProduct, { new: true });
-
-        return product;
+        return await Product.findByIdAndUpdate(id, newProduct, { new: true });
 
     } catch (error) {
         return error;
@@ -322,8 +326,7 @@ export const putProduct = async (req) => {
 
 export const delProduct = async (id) => {
     try {
-        const product = await Product.findByIdAndDelete({ _id: id });
-        return product;
+        return await Product.findByIdAndDelete({ _id: id });
     } catch (error) {
         return error;
     }
