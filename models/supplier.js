@@ -8,7 +8,7 @@ const supplierSchema = mongoose.Schema({
     email: {type: String, unique: true, required: true, max: 155},
     phone: {type: String, unique: true, required: true, max: 155},
     address: {type: String, required: true, max: 155},
-    status: {type: Boolean, required: true, default: true}
+    status: {type: Boolean, required: false, default: true}
 },{timestamps:true});
 
 const Supplier = mongoose.model('Supplier', supplierSchema);

@@ -32,7 +32,7 @@ export const getById = async(req, res) => {
 
 export const post = async(req, res) => {
     try{
-        const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, status } = req.body;
+        const { code, name, description, presentation, boxes_x_mix, units_x_mix, status } = req.body;
         if (!(code, name, description, presentation, boxes_x_mix, units_x_mix, status)) {
             return res.status(400).send("All input is required");
         }

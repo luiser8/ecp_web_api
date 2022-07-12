@@ -69,7 +69,7 @@ export const getProductById = async (id) => {
 
 export const postProduct = async (req) => {
     try {
-        const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, packing_kits, status } = req.body;
+        const { code, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, status } = req.body;
 
         if (await Product.exists({ code })) {
             return `The code ${code} no repeat`;
@@ -121,6 +121,9 @@ export const postProduct = async (req) => {
                 presentation,
                 boxes_x_mix,
                 units_x_mix,
+                margin_of_gain, 
+                pvp_x_boxes, 
+                pvp_x_units,
                 materials: materials !== undefined ? materials_calc : materials,
                 packing_kits: packing_kits !== undefined ? packings_kits_calc : packing_kits,
                 total_x_materials: materials !== undefined ? {
@@ -160,7 +163,7 @@ export const postProduct = async (req) => {
 export const putProduct = async (req) => {
     try {
         const { id } = req.params;
-        const { code, name, description, presentation, boxes_x_mix, units_x_mix, materials, packing_kits, status } = req.body;
+        const { code, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
@@ -288,6 +291,9 @@ export const putProduct = async (req) => {
             presentation,
             boxes_x_mix,
             units_x_mix,
+            margin_of_gain, 
+            pvp_x_boxes, 
+            pvp_x_units,
             materials: materials !== undefined ? materials_calc : materials,
             packing_kits: packing_kits !== undefined ? packings_kits_calc : packing_kits,
             total_x_materials: materials !== undefined ? {
