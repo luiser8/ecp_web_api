@@ -4,12 +4,19 @@ import Material from '../models/material.js';
 import Supplier from '../models/supplier.js';
 import Unit from '../models/unit.js';
 
+export const getMaterialsSimpleAll = async() => {
+    try{
+        return await Material.find({});
+    }catch(error){
+        return error;
+    }
+};
+
 export const getMaterialsAll = async() => {
     try{
-        const materials = await Material.find({})
-            .populate({path: "supplier", model: Supplier})
-            .populate({path: "unit", model: Unit});
-        return materials;
+        return await Material.find({})
+        .populate({path: "supplier", model: Supplier})
+        .populate({path: "unit", model: Unit});
     }catch(error){
         return error;
     }
@@ -17,10 +24,9 @@ export const getMaterialsAll = async() => {
 
 export const getMaterialById = async(id) => {
     try{
-        const material = await Material.findById({_id: id})
-            .populate({path: "supplier", model: Supplier})
-            .populate({path: "unit", model: Unit});
-        return material;
+        return await Material.findById({_id: id})
+        .populate({path: "supplier", model: Supplier})
+        .populate({path: "unit", model: Unit});
     }catch(error){
         return error;
     }
@@ -28,8 +34,7 @@ export const getMaterialById = async(id) => {
 
 export const getMaterialSingleById = async(id) => {
     try{
-        const material = await Material.findById({_id: id});
-        return material;
+        return await Material.findById({_id: id});
     }catch(error){
         return error;
     }
@@ -126,8 +131,7 @@ export const putMaterialUpCurrentQty = async(req) => {
 
 export const delMaterial = async(id) => {
     try{
-        const material = await Material.findByIdAndDelete({_id: id});
-        return material;
+        return await Material.findByIdAndDelete({_id: id});
     }catch(error){
         return error;
     }
