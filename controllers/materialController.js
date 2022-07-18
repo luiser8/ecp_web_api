@@ -1,6 +1,15 @@
-import { getMaterialsAll, getMaterialById, getMaterialSingleById, postMaterial, putMaterial, delMaterial } from '../services/materialService.js';
+import { getMaterialsSimpleAll, getMaterialsAll, getMaterialById, getMaterialSingleById, postMaterial, putMaterial, delMaterial } from '../services/materialService.js';
 import { getUnitById } from '../services/unitService.js';
 import { getSupplierById } from '../services/supplierService.js';
+
+export const getSimpleAll = async(_, res) => {
+    try{
+        const materials = await getMaterialsSimpleAll();
+        res.status(200).json(materials)
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
 
 export const getAll = async(_, res) => {
     try{
