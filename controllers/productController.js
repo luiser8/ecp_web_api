@@ -1,4 +1,4 @@
-import { getProductsSimpleAll, getProductsAll, getProductById, postProduct, putProduct, delProduct } from '../services/productService.js';
+import { getProductsSimpleAll, getProductsCodeExists, getProductsAll, getProductById, postProduct, putProduct, delProduct } from '../services/productService.js';
 import { putMaterialDownCurrentQty } from '../services/materialService.js';
 import { putPackingKitDownCurrentQty } from '../services/packingKitService.js';
 
@@ -6,6 +6,16 @@ export const getSimpleAll = async(_, res) => {
     try{
         const products = await getProductsSimpleAll();
         res.status(200).json(products)
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
+
+export const getCodeExists = async(req, res) => {
+    try{
+        const { code } = req.params;
+        const product = await getProductsCodeExists(code);
+        res.status(200).json(product)
     }catch(error){
         res.status(404).json({error:error.message});
     }

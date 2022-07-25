@@ -1,9 +1,10 @@
 import express from 'express';
-import { getSimpleAll, getAll, getById, post, put, del } from '../controllers/productController.js';
+import { getSimpleAll, getCodeExists, getAll, getById, post, put, del } from '../controllers/productController.js';
 import { auth } from '../middleware/auth.js';
 
 const productRouter = express.Router();
 productRouter.get('/', auth, getSimpleAll);
+productRouter.get('/:code', auth, getCodeExists);
 productRouter.get('/all', auth, getAll);
 productRouter.get('/:id', auth, getById);
 productRouter.post('/', auth, post);
