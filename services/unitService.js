@@ -4,8 +4,7 @@ import Unit from '../models/unit.js';
 
 export const getUnitAll = async() => {
     try{
-        const units = await Unit.find();
-        return units;
+        return await Unit.find();
     }catch(error){
         return error;
     }
@@ -13,8 +12,7 @@ export const getUnitAll = async() => {
 
 export const getUnitById = async(id) => {
     try{
-        const unit = await Unit.findById({_id: id});
-        return unit;
+        return await Unit.findById({_id: id});
     }catch(error){
         return error;
     }
@@ -52,9 +50,8 @@ export const putUnit = async(req) => {
         }
 
         const newUnit = { code, name, _id: id };
-        const unit = await Unit.findByIdAndUpdate(id, newUnit, { new: true });
 
-        return unit;
+        return await Unit.findByIdAndUpdate(id, newUnit, { new: true });
 
     }catch(error){
         return error;
@@ -63,8 +60,7 @@ export const putUnit = async(req) => {
 
 export const delUnit = async(id) => {
     try{
-        const unit = await Unit.findByIdAndDelete({_id: id});
-        return unit;
+        return await Unit.findByIdAndDelete({_id: id});
     }catch(error){
         return error;
     }

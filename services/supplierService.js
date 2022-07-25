@@ -4,8 +4,7 @@ import Supplier from '../models/supplier.js';
 
 export const getSuppliersAll = async() => {
     try{
-        const suppliers = await Supplier.find();
-        return suppliers;
+        return await Supplier.find();
     }catch(error){
         return error;
     }
@@ -13,8 +12,7 @@ export const getSuppliersAll = async() => {
 
 export const getSupplierById = async(id) => {
     try{
-        const supplier = await Supplier.findById({_id: id});
-        return supplier;
+        return await Supplier.findById({_id: id});
     }catch(error){
         return error;
     }
@@ -56,9 +54,8 @@ export const putSupplier = async(req) => {
         }
 
         const newSupplier = { identifier, type, name, description, email, phone, address, _id: id };
-        const supplier = await Supplier.findByIdAndUpdate(id, newSupplier, { new: true });
 
-        return supplier;
+        return await Supplier.findByIdAndUpdate(id, newSupplier, { new: true });
 
     }catch(error){
         return error;
@@ -67,8 +64,7 @@ export const putSupplier = async(req) => {
 
 export const delSupplier = async(id) => {
     try{
-        const supplier = await Supplier.findByIdAndDelete({_id: id});
-        return supplier;
+        return await Supplier.findByIdAndDelete({_id: id});
     }catch(error){
         return error;
     }

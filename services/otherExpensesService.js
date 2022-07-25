@@ -4,8 +4,7 @@ import OtherExpenses from '../models/other_expenses.js';
 
 export const getOtherExpensesAll = async() => {
     try{
-        const otherExpenses = await OtherExpenses.find();
-        return otherExpenses;
+        return await OtherExpenses.find();
     }catch(error){
         return error;
     }
@@ -13,8 +12,7 @@ export const getOtherExpensesAll = async() => {
 
 export const getOtherExpensesById = async(id) => {
     try{
-        const otherExpenses = await OtherExpenses.findById({_id: id});
-        return otherExpenses;
+        return await OtherExpenses.findById({_id: id});
     }catch(error){
         return error;
     }
@@ -50,9 +48,8 @@ export const putOtherExpenses = async(req) => {
         }
 
         const newOtherExpenses = { unit, name, description, _id: id };
-        const otherExpenses = await OtherExpenses.findByIdAndUpdate(id, newOtherExpenses, { new: true });
 
-        return otherExpenses;
+        return await OtherExpenses.findByIdAndUpdate(id, newOtherExpenses, { new: true });
 
     }catch(error){
         return error;
@@ -61,8 +58,7 @@ export const putOtherExpenses = async(req) => {
 
 export const delOtherExpenses = async(id) => {
     try{
-        const otherExpenses = await OtherExpenses.findByIdAndDelete({_id: id});
-        return otherExpenses;
+        return await OtherExpenses.findByIdAndDelete({_id: id});
     }catch(error){
         return error;
     }

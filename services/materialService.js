@@ -76,9 +76,8 @@ export const putMaterial = async(req) => {
         }
 
         const newMaterial = { category, unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, expiration_date, status, _id: id };
-        const material = await Material.findByIdAndUpdate(id, newMaterial, { new: true });
 
-        return material;
+        return await Material.findByIdAndUpdate(id, newMaterial, { new: true });
 
     }catch(error){
         return error;

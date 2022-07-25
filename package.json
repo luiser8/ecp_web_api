@@ -26,7 +26,8 @@
     "qrcode": "^1.5.0",
     "mongoose": "~6.4.4",
     "morgan": "^1.10.0",
-    "mongo-seeding": "^3.7.2"
+    "mongo-seeding": "^3.7.2",
+    "apicache": "^1.6.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.18"

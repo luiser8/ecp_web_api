@@ -3,8 +3,7 @@ import Role from '../models/role.js';
 
 export const getRoleAll = async() => {
     try{
-        const role = await Role.find();
-        return role;
+        return await Role.find();
     }catch(error){
         return error;
     }
@@ -12,8 +11,7 @@ export const getRoleAll = async() => {
 
 export const getRoleById = async(id) => {
     try{
-        const role = await Role.findById({_id: id});
-        return role;
+        return await Role.findById({_id: id});
     }catch(error){
         return error;
     }

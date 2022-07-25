@@ -7,9 +7,8 @@ import User from '../models/user.js';
 
 export const getUsersAll = async() => {
     try{
-        const user = await User.find({})
-            .populate({path: "role", model: Role, select: "name"});
-        return user;
+        return await User.find({})
+        .populate({path: "role", model: Role, select: "name"});
     }catch(error){
         return error;
     }
@@ -17,8 +16,7 @@ export const getUsersAll = async() => {
 
 export const getUserById = async(id) => {
     try{
-        const user = await User.findById({_id: id});
-        return user;
+        return await User.findById({_id: id});
     }catch(error){
         return error;
     }
@@ -124,8 +122,7 @@ export const loginUser = async(req) => {
 
 export const delUser = async(id) => {
     try{
-        const user = await User.findByIdAndDelete({_id: id});
-        return user;
+        return await User.findByIdAndDelete({_id: id});
     }catch(error){
         return error;
     }

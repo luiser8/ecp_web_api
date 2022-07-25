@@ -4,8 +4,7 @@ import PackingKit from '../models/packing_kit.js';
 
 export const getPackingKitAll = async() => {
     try{
-        const packingKit = await PackingKit.find();
-        return packingKit;
+        return await PackingKit.find();
     }catch(error){
         return error;
     }
@@ -13,8 +12,7 @@ export const getPackingKitAll = async() => {
 
 export const getPackingKitById = async(id) => {
     try{
-        const packingKit = await PackingKit.findById({_id: id});
-        return packingKit;
+        return await PackingKit.findById({_id: id});
     }catch(error){
         return error;
     }
@@ -50,9 +48,8 @@ export const putPackingKit = async(req) => {
         }
 
         const newPackingKit = { unit, name, description, entered_amount, current_amount, purchase_price, _id: id };
-        const packingKit = await PackingKit.findByIdAndUpdate(id, newPackingKit, { new: true });
 
-        return packingKit;
+        return await PackingKit.findByIdAndUpdate(id, newPackingKit, { new: true });
 
     }catch(error){
         return error;
@@ -105,8 +102,7 @@ export const putPackingKitUpCurrentQty = async(req) => {
 
 export const delPackingKit = async(id) => {
     try{
-        const packingKit = await PackingKit.findByIdAndDelete({_id: id});
-        return packingKit;
+        return await PackingKit.findByIdAndDelete({_id: id});
     }catch(error){
         return error;
     }

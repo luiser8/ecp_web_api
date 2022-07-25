@@ -4,8 +4,7 @@ import Category from '../models/category.js';
 
 export const getCategoryAll = async() => {
     try{
-        const category = await Category.find();
-        return category;
+        return await Category.find();
     }catch(error){
         return error;
     }
@@ -13,8 +12,7 @@ export const getCategoryAll = async() => {
 
 export const getCategoryById = async(id) => {
     try{
-        const category = await Category.findById({_id: id});
-        return category;
+        return await Category.findById({_id: id});
     }catch(error){
         return error;
     }
@@ -50,9 +48,8 @@ export const putCategory = async(req) => {
         }
 
         const newCategory = { name, description, _id: id };
-        const category = await Category.findByIdAndUpdate(id, newCategory, { new: true });
 
-        return category;
+        return await Category.findByIdAndUpdate(id, newCategory, { new: true });
 
     }catch(error){
         return error;
@@ -61,8 +58,7 @@ export const putCategory = async(req) => {
 
 export const delCategory = async(id) => {
     try{
-        const category = await Category.findByIdAndDelete({_id: id});
-        return category;
+        return await Category.findByIdAndDelete({_id: id});
     }catch(error){
         return error;
     }
