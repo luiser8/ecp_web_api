@@ -4,7 +4,7 @@ import { auth } from '../middleware/auth.js';
 
 const productRouter = express.Router();
 productRouter.get('/', auth, getSimpleAll);
-productRouter.get('/:code', auth, getCodeExists);
+productRouter.get('/check/:code', auth, getCodeExists);
 productRouter.get('/all', auth, getAll);
 productRouter.get('/:id', auth, getById);
 productRouter.post('/', auth, post);
