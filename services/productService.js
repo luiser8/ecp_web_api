@@ -4,7 +4,7 @@ import Material from '../models/material.js';
 import PackingKit from '../models/packing_kit.js';
 import Product from '../models/product.js';
 import Unit from '../models/unit.js';
-import { calculations } from '../middleware/calculations.js';
+import { calculations_materials } from '../middleware/calculations_materials.js';
 import { checkNotRepitMaterial, checkNotRepitPackingKits } from '../helpers/checkHelper.js';
 import { qrCodeHelper } from '../helpers/qrCodeHelper.js';
 import { calculations_kits } from '../middleware/calculations_kits.js';
@@ -33,22 +33,22 @@ export const getProductsCodeExists = async (code) => {
 export const getProductsAll = async () => {
     try {
         return await Product.find({})
-        .populate({
-            path: "materials", populate: [
-                {
-                    path: "material", model: Material, select: "code name",
-                    populate: { path: "unit", model: Unit, select: "code" }
-                }
-            ]
-        })
-        .populate({
-            path: "packing_kits", populate: [
-                {
-                    path: "packing_kit", model: PackingKit, select: "name",
-                    populate: { path: "unit", model: Unit, select: "code" }
-                }
-            ]
-        });
+            .populate({
+                path: "materials", populate: [
+                    {
+                        path: "material", model: Material, select: "code name",
+                        populate: { path: "unit", model: Unit, select: "code" }
+                    }
+                ]
+            })
+            .populate({
+                path: "packing_kits", populate: [
+                    {
+                        path: "packing_kit", model: PackingKit, select: "name",
+                        populate: { path: "unit", model: Unit, select: "code" }
+                    }
+                ]
+            });
     } catch (error) {
         return error;
     }
@@ -57,22 +57,22 @@ export const getProductsAll = async () => {
 export const getProductById = async (id) => {
     try {
         return await Product.findById({ _id: id })
-        .populate({
-            path: "materials", populate: [
-                {
-                    path: "material", model: Material, select: "code name",
-                    populate: { path: "unit", model: Unit, select: "code" }
-                }
-            ]
-        })
-        .populate({
-            path: "packing_kits", populate: [
-                {
-                    path: "packing_kit", model: PackingKit, select: "name",
-                    populate: { path: "unit", model: Unit, select: "code" }
-                }
-            ]
-        });
+            .populate({
+                path: "materials", populate: [
+                    {
+                        path: "material", model: Material, select: "code name",
+                        populate: { path: "unit", model: Unit, select: "code" }
+                    }
+                ]
+            })
+            .populate({
+                path: "packing_kits", populate: [
+                    {
+                        path: "packing_kit", model: PackingKit, select: "name",
+                        populate: { path: "unit", model: Unit, select: "code" }
+                    }
+                ]
+            });
     } catch (error) {
         return error;
     }
@@ -101,7 +101,7 @@ export const postProduct = async (req) => {
             total_m_cost_x_box,
             total_m_qty_x_unit,
             total_m_cost_x_unit,
-        } = calculations(
+        } = calculations_materials(
             {
                 boxes_x_mix,
                 units_x_mix,
@@ -132,8 +132,8 @@ export const postProduct = async (req) => {
                 presentation,
                 boxes_x_mix,
                 units_x_mix,
-                margin_of_gain, 
-                pvp_x_boxes, 
+                margin_of_gain,
+                pvp_x_boxes,
                 pvp_x_units,
                 materials: materials !== undefined ? materials_calc : materials,
                 packing_kits: packing_kits !== undefined ? packings_kits_calc : packing_kits,
@@ -193,7 +193,7 @@ export const putProduct = async (req) => {
         let packing_kitsOld = [];
 
         await getProductById(id).then(item => {
-            if(materials !== undefined){
+            if (materials !== undefined) {
                 item.materials.forEach(async element_material => {
 
                     const checkNotRepitM = checkNotRepitMaterial({
@@ -202,31 +202,26 @@ export const putProduct = async (req) => {
                     });
 
                     if (checkNotRepitM.error === false) {
-                        element_material.calculations.forEach(async cal => {
-                            materialsOld.push(
-                                {
-                                    "material": element_material.material._id.toString(),
-                                    "calculations": [
-                                        {
-                                            "qty_x_mix": cal.qty_x_mix,
-                                            "cost_x_mix": cal.cost_x_mix
-                                        }
-                                    ]
-                                }
-                            );
-                        });
+                        const cal = element_material;
+                        materialsOld.push(
+                            {
+                                "material": element_material.material._id.toString(),
+                                "qty_x_mix": cal.qty_x_mix,
+                                "cost_x_mix": cal.cost_x_mix
+                            }
+                        );
                         return;
                     }
                     const materialDelete = element_material.material._id.toString();
 
                     await putMaterialUpCurrentQty(materialsLocal);
 
-                    const removeMaterial = materialsLocal.filter(m => m.material.toString() !== materialDelete); 
+                    const removeMaterial = materialsLocal.filter(m => m.material.toString() !== materialDelete);
                     materialsLocal = removeMaterial;
                 });
             }
 
-            if(packing_kits !== undefined){
+            if (packing_kits !== undefined) {
                 item.packing_kits.forEach(async element_packing_kit => {
 
                     const checkNotRepitPk = checkNotRepitPackingKits({
@@ -235,26 +230,21 @@ export const putProduct = async (req) => {
                     });
 
                     if (checkNotRepitPk.error === false) {
-                        element_packing_kit.calculations.forEach(async cal => {
-                            packing_kitsOld.push(
-                                {
-                                    "packing_kit": element_packing_kit.packing_kit._id.toString(),
-                                    "calculations": [
-                                        {
-                                            "cost_unit_x_mix": cal.cost_unit_x_mix,
-                                            "qty_x_box": cal.qty_x_box
-                                        }
-                                    ]
-                                }
-                            );
-                        });
+                        const cal = element_packing_kit;
+                        packing_kitsOld.push(
+                            {
+                                "packing_kit": element_packing_kit.packing_kit._id.toString(),
+                                "cost_unit_x_mix": cal.cost_unit_x_mix,
+                                "qty_x_box": cal.qty_x_box
+                            }
+                        );
                         return;
                     }
                     const packingKitDelete = element_packing_kit.packing_kit._id.toString();
 
                     await putPackingKitUpCurrentQty(packing_kitsLocal);
 
-                    const removePacking_kit = packing_kitsLocal.filter(m => m.packing_kit.toString() !== packingKitDelete); 
+                    const removePacking_kit = packing_kitsLocal.filter(m => m.packing_kit.toString() !== packingKitDelete);
                     packing_kitsLocal = removePacking_kit;
                 });
             }
@@ -272,7 +262,7 @@ export const putProduct = async (req) => {
             total_m_cost_x_box,
             total_m_qty_x_unit,
             total_m_cost_x_unit,
-        } = calculations(
+        } = calculations_materials(
             {
                 boxes_x_mix,
                 units_x_mix,
@@ -302,8 +292,8 @@ export const putProduct = async (req) => {
             presentation,
             boxes_x_mix,
             units_x_mix,
-            margin_of_gain, 
-            pvp_x_boxes, 
+            margin_of_gain,
+            pvp_x_boxes,
             pvp_x_units,
             materials: materials !== undefined ? materials_calc : materials,
             packing_kits: packing_kits !== undefined ? packings_kits_calc : packing_kits,
