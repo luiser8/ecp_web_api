@@ -28,7 +28,7 @@ export const post = async(req, res) => {
 
         const category = await postCategory(req);
 
-        res.status(201).json(category);
+        res.status(201).json(category._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }
@@ -43,7 +43,7 @@ export const put = async(req, res) => {
 
         const category = await putCategory(req);
 
-        res.status(201).json(category);
+        res.status(201).json(category._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }

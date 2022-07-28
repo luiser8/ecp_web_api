@@ -28,7 +28,7 @@ export const post = async(req, res) => {
 
         const packingKit = await postPackingKit(req);
 
-        res.status(201).json(packingKit);
+        res.status(201).json(packingKit._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }
@@ -43,7 +43,7 @@ export const put = async(req, res) => {
 
         const packingKit = await putPackingKit(req);
 
-        res.status(201).json(packingKit);
+        res.status(201).json(packingKit._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }

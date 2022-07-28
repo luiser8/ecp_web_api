@@ -28,7 +28,7 @@ export const post = async(req, res) => {
 
         const user = await postUser(req);
 
-        res.status(201).json(user);
+        res.status(201).json(user._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }
@@ -43,7 +43,7 @@ export const put = async(req, res) => {
 
         const user = await putUser(req);
 
-        res.status(201).json(user);
+        res.status(201).json(user._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }
