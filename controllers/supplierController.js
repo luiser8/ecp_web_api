@@ -28,7 +28,7 @@ export const post = async(req, res) => {
 
         const supplier = await postSupplier(req);
 
-        res.status(201).json(supplier);
+        res.status(201).json(supplier._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }
@@ -43,7 +43,7 @@ export const put = async(req, res) => {
 
         const supplier = await putSupplier(req);
 
-        res.status(201).json(supplier);
+        res.status(201).json(supplier._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }

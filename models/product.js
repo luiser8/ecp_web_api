@@ -100,7 +100,7 @@ const productSchema = mongoose.Schema({
             total_cost_x_unit: { type: Number, required: false, set(v) { return v.toFixed(4); }, },
         }
     ],
-    status: { type: String, required: true, enum: ['in process', 'in planning', 'finished', 'slow'] }
+    status: { type: String, required: true, enum: ['in process', 'finished'] }
 }, { timestamps: true });
 
 const Product = mongoose.model('Product', productSchema);

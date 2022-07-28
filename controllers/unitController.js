@@ -28,7 +28,7 @@ export const post = async(req, res) => {
 
         const unit = await postUnit(req);
 
-        res.status(201).json(unit);
+        res.status(201).json(unit._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }
@@ -43,7 +43,7 @@ export const put = async(req, res) => {
 
         const unit = await putUnit(req);
 
-        res.status(201).json(unit);
+        res.status(201).json(unit._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }

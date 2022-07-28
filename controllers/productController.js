@@ -57,7 +57,7 @@ export const post = async(req, res) => {
             await putPackingKitDownCurrentQty(product.packing_kits);
         }
 
-        res.status(201).json(product);
+        res.status(201).json(product._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }
@@ -80,7 +80,7 @@ export const put = async(req, res) => {
             await putPackingKitDownCurrentQty(product.packing_kits);
         }
 
-        res.status(201).json(product);
+        res.status(201).json(product._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }

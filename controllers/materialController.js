@@ -71,7 +71,7 @@ export const post = async(req, res) => {
 
         const material = await postMaterial(req);
 
-        res.status(201).json(material);
+        res.status(201).json(material._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }
@@ -86,7 +86,7 @@ export const put = async(req, res) => {
 
         const material = await putMaterial(req);
 
-        res.status(201).json(material);
+        res.status(201).json(material._id);
     }catch(error){
         res.status(409).json({error:error.message});
     }
