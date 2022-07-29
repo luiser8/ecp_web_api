@@ -44,7 +44,7 @@ export const getProductsAll = async () => {
             .populate({
                 path: "packing_kits", populate: [
                     {
-                        path: "packing_kit", model: PackingKit, select: "name",
+                        path: "packing_kit", model: PackingKit, select: "code name",
                         populate: { path: "unit", model: Unit, select: "code" }
                     }
                 ]
@@ -68,7 +68,7 @@ export const getProductById = async (id) => {
             .populate({
                 path: "packing_kits", populate: [
                     {
-                        path: "packing_kit", model: PackingKit, select: "name",
+                        path: "packing_kit", model: PackingKit, select: "code name",
                         populate: { path: "unit", model: Unit, select: "code" }
                     }
                 ]
@@ -85,7 +85,9 @@ export const postProduct = async (req) => {
         if (await Product.exists({ code })) {
             return `The code ${code} no repeat`;
         }
-
+        if (await Product.exists({ name })) {
+            return `The code ${name} no repeat`;
+        }
         if (!['in process', 'finished', 'slow'].includes(status)) {
             return `Status enum value invalid`;
         }
@@ -181,6 +183,9 @@ export const putProduct = async (req) => {
         }
         if (await Product.exists({ code })) {
             return `The code ${code} no repeat`;
+        }
+        if (await Product.exists({ name })) {
+            return `The code ${name} no repeat`;
         }
         if (!['in process', 'finished', 'slow'].includes(status)) {
             return `Status enum value invalid`;

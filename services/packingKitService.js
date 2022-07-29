@@ -18,15 +18,29 @@ export const getPackingKitById = async (id) => {
     }
 };
 
+export const getPackingKitCodeExists = async (code) => {
+    try {
+        const packingKit = await PackingKit.exists({ code });
+
+        return true ? packingKit != null : false;
+
+    } catch (error) {
+        return error;
+    }
+};
+
 export const postPackingKit = async (req) => {
     try {
-        const { unit, name, description, entered_amount, current_amount, purchase_price } = req.body;
+        const { unit, code, name, description, entered_amount, current_amount, purchase_price } = req.body;
 
+        if (await PackingKit.exists({ code })) {
+            return `The code ${code} no repeat`;
+        }
         if (await PackingKit.exists({ name })) {
             return `The identifier ${name} no repeat`;
         }
-
-        const packingKit = await PackingKit.create({ unit, name, description, entered_amount, current_amount, purchase_price });
+        
+        const packingKit = await PackingKit.create({ unit, code, name, description, entered_amount, current_amount, purchase_price });
 
         return await packingKit.save();
 
@@ -38,16 +52,19 @@ export const postPackingKit = async (req) => {
 export const putPackingKit = async (req) => {
     try {
         const { id } = req.params;
-        const { unit, name, description, entered_amount, current_amount, purchase_price } = req.body;
+        const { unit, code, name, description, entered_amount, current_amount, purchase_price } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
+        }
+        if (await PackingKit.exists({ code })) {
+            return `The code ${code} no repeat`;
         }
         if (await PackingKit.exists({ name })) {
             return `The identifier ${name} no repeat`;
         }
 
-        const newPackingKit = { unit, name, description, entered_amount, current_amount, purchase_price, _id: id };
+        const newPackingKit = { unit, code, name, description, entered_amount, current_amount, purchase_price, _id: id };
 
         return await PackingKit.findByIdAndUpdate(id, newPackingKit, { new: true });
 
