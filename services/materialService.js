@@ -32,12 +32,16 @@ export const getMaterialById = async (id) => {
     }
 };
 
-export const getMaterialCodeExists = async (code) => {
+export const getMaterialsExists = async (type, value) => {
     try {
-        const material = await Material.exists({ code });
-
-        return true ? material != null : false;
-
+        if(type === "code"){
+            const material = await Material.exists({ code: value });
+            return true ? material != null : false;
+        }
+        if(type === "name"){
+            const material = await Material.exists({ name: value });
+            return true ? material != null : false;
+        }
     } catch (error) {
         return error;
     }

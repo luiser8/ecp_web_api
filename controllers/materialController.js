@@ -1,4 +1,4 @@
-import { getMaterialsSimpleAll, getMaterialsAll, getMaterialById, getMaterialSingleById, postMaterial, putMaterial, delMaterial, getMaterialCodeExists } from '../services/materialService.js';
+import { getMaterialsSimpleAll, getMaterialsAll, getMaterialById, getMaterialSingleById, postMaterial, putMaterial, delMaterial, getMaterialsExists } from '../services/materialService.js';
 import { getUnitById } from '../services/unitService.js';
 import { getSupplierById } from '../services/supplierService.js';
 
@@ -30,10 +30,10 @@ export const getById = async(req, res) => {
     }
 };
 
-export const getCodeExists = async(req, res) => {
+export const getMaterialExists = async(req, res) => {
     try{
-        const { code } = req.params;
-        const material = await getMaterialCodeExists(code);
+        const { type, value } = req.params;
+        const material = await getMaterialsExists(type, value);
         res.status(200).json(material)
     }catch(error){
         res.status(404).json({error:error.message});

@@ -1,4 +1,4 @@
-import { getPackingKitAll, getPackingKitById, postPackingKit, putPackingKit, delPackingKit, getPackingKitCodeExists } from '../services/packingKitService.js';
+import { getPackingKitAll, getPackingKitById, postPackingKit, putPackingKit, delPackingKit, getPackingKitsExists } from '../services/packingKitService.js';
 
 export const getAll = async(_, res) => {
     try{
@@ -19,10 +19,10 @@ export const getById = async(req, res) => {
     }
 };
 
-export const getCodeExists = async(req, res) => {
+export const getPackingKitExists = async(req, res) => {
     try{
-        const { code } = req.params;
-        const packingKit = await getPackingKitCodeExists(code);
+        const { type, value } = req.params;
+        const packingKit = await getPackingKitsExists(type, value);
         res.status(200).json(packingKit)
     }catch(error){
         res.status(404).json({error:error.message});

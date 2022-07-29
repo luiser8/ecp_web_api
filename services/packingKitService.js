@@ -18,12 +18,16 @@ export const getPackingKitById = async (id) => {
     }
 };
 
-export const getPackingKitCodeExists = async (code) => {
+export const getPackingKitsExists = async (type, value) => {
     try {
-        const packingKit = await PackingKit.exists({ code });
-
-        return true ? packingKit != null : false;
-
+        if(type === "code"){
+            const packingKit = await PackingKit.exists({ code: value });
+            return true ? packingKit != null : false;
+        }
+        if(type === "name"){
+            const packingKit = await PackingKit.exists({ name: value });
+            return true ? packingKit != null : false;
+        }
     } catch (error) {
         return error;
     }
