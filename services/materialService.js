@@ -32,6 +32,17 @@ export const getMaterialById = async (id) => {
     }
 };
 
+export const getMaterialCodeExists = async (code) => {
+    try {
+        const material = await Material.exists({ code });
+
+        return true ? material != null : false;
+
+    } catch (error) {
+        return error;
+    }
+};
+
 export const getMaterialSingleById = async (id) => {
     try {
         return await Material.findById({ _id: id });
@@ -46,6 +57,9 @@ export const postMaterial = async (req) => {
 
         if (await Material.exists({ code })) {
             return `The code ${code} no repeat`;
+        }
+        if (await Material.exists({ name })) {
+            return `The code ${name} no repeat`;
         }
         if (!['in stock', 'on order', 'exhausted'].includes(status)) {
             throw Error("Status enum value invalid");
@@ -70,6 +84,9 @@ export const putMaterial = async (req) => {
         }
         if (await Material.exists({ code })) {
             return `The code ${code} no repeat`;
+        }
+        if (await Material.exists({ name })) {
+            return `The code ${name} no repeat`;
         }
         if (!['in stock', 'on order', 'exhausted'].includes(status)) {
             return `Status enum value invalid`;

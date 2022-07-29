@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const packingKitSchema = mongoose.Schema({
     unit: {type: mongoose.Schema.Types.ObjectId, ref: "Unit", require: true},
+    code: {type: String, unique: true, required: true},
     name: {type: String, required: true, max: 155},
     description: {type: String, required: true, max: 155},
     entered_amount: {type: Number, required: true},
