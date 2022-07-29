@@ -19,12 +19,16 @@ export const getProductsSimpleAll = async () => {
     }
 };
 
-export const getProductsCodeExists = async (code) => {
+export const getProductsExists = async (type, value) => {
     try {
-        const product = await Product.exists({ code });
-
-        return true ? product != null : false;
-
+        if(type === "code"){
+            const product = await Product.exists({ code: value });
+            return true ? product != null : false;
+        }
+        if(type === "name"){
+            const product = await Product.exists({ name: value });
+            return true ? product != null : false;
+        }
     } catch (error) {
         return error;
     }
