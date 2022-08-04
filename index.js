@@ -17,7 +17,7 @@ import packingKitRouter from './routes/packingKitRouter.js';
 import otherExpensesRouter from './routes/otherExpensesRouter.js';
 
 //Express inicializacion
-var app = express();
+const app = express();
 app.use(compression());
 
 app.use(morgan('combined'));
@@ -33,7 +33,7 @@ app.set('view engine', 'ejs');
 app.use(cors());
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({
-    extended: true 
+    extended: true
 }));
 
 app.use(morgan('dev'));
@@ -62,7 +62,7 @@ app.use((err, req, res, next) => {
     // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
-  
+
     // render the error page
     res.status(err.status || 500);
     res.render('error');

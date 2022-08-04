@@ -78,7 +78,7 @@ export const putUser = async(req) => {
         if (await User.exists({email})) {
             return `The email ${email} is not repit`;
         }
-        
+
         const encryptedPassword = await bcrypt.hash(password, 10);
 
         const accesstoken = await sign({'_id': user._id, 'username': username});
@@ -99,12 +99,12 @@ export const loginUser = async(req) => {
         const { username, password } = req.body;
 
         const user = await User.findOne({ username })
-            .populate({path: "role", model: Role, select: "name"});;
+            .populate({path: "role", model: Role, select: "name"});
 
         if (user && (await bcrypt.compare(password, user.password))) {
             const accesstoken = await sign({'_id': user._id, 'username': username});
             const refreshtoken = await signrefresh({'_id': user._id, 'username': username});
-    
+
             user.accesstoken = accesstoken;
             user.refreshtoken = refreshtoken;
 
@@ -112,7 +112,7 @@ export const loginUser = async(req) => {
 
             return user;
         }
-        
+
         return "Invalid Credentials";
 
       } catch (error) {

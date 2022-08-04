@@ -48,7 +48,7 @@ export const post = async(req, res) => {
         }
 
         const product = await postProduct(req);
-        
+
         if(product.materials.length !== 0){
             await putMaterialDownCurrentQty(product.materials);
         }

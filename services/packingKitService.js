@@ -43,7 +43,7 @@ export const postPackingKit = async (req) => {
         if (await PackingKit.exists({ name })) {
             return `The identifier ${name} no repeat`;
         }
-        
+
         const packingKit = await PackingKit.create({ unit, code, name, description, entered_amount, current_amount, purchase_price });
 
         return await packingKit.save();

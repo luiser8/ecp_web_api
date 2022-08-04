@@ -25,11 +25,11 @@ export const postOtherExpenses = async(req) => {
         if (await OtherExpenses.exists({name})) {
             return `The identifier ${name} is not repit`;
         }
-        
+
         const otherExpenses = await OtherExpenses.create({unit, name, description});
 
         return await otherExpenses.save();
-        
+
     }catch(error){
         return error;
     }

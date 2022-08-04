@@ -25,11 +25,11 @@ export const postCategory = async(req) => {
         if (await Category.exists({name})) {
             return `The identifier ${name} is not repit`;
         }
-        
+
         const category = await Category.create({name, description});
 
         return await category.save();
-        
+
     }catch(error){
         return error;
     }

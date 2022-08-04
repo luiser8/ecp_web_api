@@ -31,11 +31,11 @@ export const postSupplier = async(req) => {
         if (await Supplier.exists({phone})) {
             return `The phone ${phone} is not repit`;
         }
-        
+
         const supplier = await Supplier.create({identifier, type, name, description, email, phone, address});
 
         return await supplier.save();
-        
+
     }catch(error){
         return error;
     }
