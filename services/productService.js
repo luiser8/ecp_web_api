@@ -21,11 +21,11 @@ export const getProductsSimpleAll = async () => {
 
 export const getProductsExists = async (type, value) => {
     try {
-        if(type === "code"){
+        if (type === "code") {
             const product = await Product.exists({ code: value });
             return true ? product != null : false;
         }
-        if(type === "name"){
+        if (type === "name") {
             const product = await Product.exists({ name: value });
             return true ? product != null : false;
         }
@@ -253,7 +253,7 @@ export const putProduct = async (req) => {
 
                     await putPackingKitUpCurrentQty(packing_kitsLocal);
 
-                    const removePacking_kit = packing_kitsLocal.filter(m => m.packing_kit.toString() !== packingKitDelete);
+                    const removePacking_kit = packing_kitsLocal.filter(p => p.packing_kit.toString() !== packingKitDelete);
                     packing_kitsLocal = removePacking_kit;
                 });
             }
@@ -342,7 +342,40 @@ export const putProduct = async (req) => {
 
 export const delProduct = async (id) => {
     try {
+        await getProductById(id).then(item => {
+            if (item.materials.length !== 0) {
+                const materialsQtyUp = [];
+                item.materials.forEach(async element_material => {
+                    const cal = element_material;
+                    materialsQtyUp.push(
+                        {
+                            "material": element_material.material._id.toString(),
+                            "qty_x_mix": cal.qty_x_mix,
+                            "cost_x_mix": cal.cost_x_mix
+                        }
+                    );
+                    await putMaterialUpCurrentQty(materialsQtyUp);
+                });
+            }
+
+            if (item.packing_kits.length !== 0) {
+                const packing_kitsQtyUp = [];
+                item.packing_kits.forEach(async element_packing_kit => {
+                    const cal = element_packing_kit;
+                    packing_kitsQtyUp.push(
+                        {
+                            "packing_kit": element_packing_kit.packing_kit._id.toString(),
+                            "cost_unit_x_mix": cal.cost_unit_x_mix,
+                            "qty_x_box": cal.qty_x_box
+                        }
+                    );
+                    await putPackingKitUpCurrentQty(packing_kitsQtyUp);
+                });
+            }
+        });
+
         return await Product.findByIdAndDelete({ _id: id });
+
     } catch (error) {
         return error;
     }

@@ -116,9 +116,10 @@ export const putMaterialDownCurrentQty = async (req) => {
                 const cal = materials[item];
                 const newCurrentAmount = material.current_amount - cal.qty_x_mix;
 
-                Material.findByIdAndUpdate({ _id: material._id }, { current_amount: newCurrentAmount }, { new: true }, function (error, result) {
-                    return result ? result : error;
-                });
+                Material.findByIdAndUpdate({ _id: material._id },
+                    { current_amount: newCurrentAmount },
+                    { new: true },
+                        (error, result) => result ? result : error);
             });
         });
     } catch (error) {
@@ -137,9 +138,10 @@ export const putMaterialUpCurrentQty = async (req) => {
                 const cal = materials[item];
                 const newCurrentAmount = material.current_amount + cal.qty_x_mix;
 
-                Material.findByIdAndUpdate({ _id: material._id }, { current_amount: newCurrentAmount }, { new: true }, function (error, result) {
-                    return result ? result : error;
-                });
+                Material.findByIdAndUpdate({ _id: material._id },
+                    { current_amount: newCurrentAmount },
+                    { new: true },
+                        (error, result) => result ? result : error);
             });
         });
     } catch (error) {
