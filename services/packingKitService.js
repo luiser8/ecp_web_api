@@ -88,9 +88,10 @@ export const putPackingKitDownCurrentQty = async (req) => {
                 const cal = packing_kits[item];
                 const newCurrentAmount = pk.current_amount - cal.qty_x_box;
 
-                PackingKit.findByIdAndUpdate({ _id: pk._id }, { current_amount: newCurrentAmount }, { new: true }, function (error, result) {
-                    return result ? result : error;
-                });
+                PackingKit.findByIdAndUpdate({ _id: pk._id },
+                    { current_amount: newCurrentAmount },
+                    { new: true },
+                        (error, result) => result ? result : error);
             });
         });
     } catch (error) {
@@ -109,9 +110,10 @@ export const putPackingKitUpCurrentQty = async (req) => {
                 const cal = packing_kits[item];
                 const newCurrentAmount = pk.current_amount + cal.qty_x_box;
 
-                PackingKit.findByIdAndUpdate({ _id: pk._id }, { current_amount: newCurrentAmount }, { new: true }, function (error, result) {
-                    return result ? result : error;
-                });
+                PackingKit.findByIdAndUpdate({ _id: pk._id },
+                    { current_amount: newCurrentAmount },
+                    { new: true },
+                        (error, result) => result ? result : error);
             });
         });
     } catch (error) {
