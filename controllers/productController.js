@@ -47,8 +47,6 @@ export const post = async(req, res) => {
             return res.status(400).send("All input is required");
         }
 
-        status = "in process";
-
         const product = await postProduct(req);
 
         if(product.materials.length !== 0){

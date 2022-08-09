@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import '../config/database.js';
 import Material from '../models/material.js';
+import Category from '../models/category.js';
 import Supplier from '../models/supplier.js';
 import Unit from '../models/unit.js';
 
@@ -25,8 +26,9 @@ export const getMaterialsAll = async () => {
 export const getMaterialById = async (id) => {
     try {
         return await Material.findById({ _id: id })
-            .populate({ path: "supplier", model: Supplier })
-            .populate({ path: "unit", model: Unit });
+            .populate({ path: "category", model: Category, select: "name" })
+            .populate({ path: "supplier", model: Supplier, select: "name" })
+            .populate({ path: "unit", model: Unit, select: "code name" });
     } catch (error) {
         return error;
     }
@@ -85,17 +87,23 @@ export const putMaterial = async (req) => {
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
         }
-        if (await Material.exists({ code })) {
-            return `The code ${code} no repeat`;
+
+        let new_current_amount = 0;
+        let new_entered_amount = 0;
+        const materialSingle = await getMaterialSingleById(id);
+        if(entered_amount !== materialSingle.entered_amount){
+            new_current_amount = entered_amount + materialSingle.current_amount;
+            new_entered_amount = entered_amount + materialSingle.entered_amount;
+        }else{
+            new_current_amount = materialSingle.current_amount;
+            new_entered_amount = materialSingle.entered_amount;
         }
-        if (await Material.exists({ name })) {
-            return `The code ${name} no repeat`;
-        }
+
         if (!['in stock', 'on order', 'exhausted'].includes(status)) {
             return `Status enum value invalid`;
         }
 
-        const newMaterial = { category, unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, expiration_date, status, _id: id };
+        const newMaterial = { category, unit, supplier, code, name, description, entered_amount: new_entered_amount, current_amount: new_current_amount, purchase_price, expiration_date, status, _id: id };
 
         return await Material.findByIdAndUpdate(id, newMaterial, { new: true });
 

@@ -11,7 +11,7 @@ const materialSchema = mongoose.Schema({
     current_amount: {type: Number, required: false},
     purchase_price: {type: Number, required: false, set(v) { return v.toFixed(2); }},
     expiration_date: {type: Date, required: false},
-    status: {type: String, required: false, enum: ['in stock', 'on order', 'exhausted', 'other']}
+    status: {type: String, required: false, enum: ['in stock', 'on order']}
 },{timestamps:true});
 
 const Material = mongoose.model('Material', materialSchema);
