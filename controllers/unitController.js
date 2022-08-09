@@ -1,4 +1,13 @@
-import { getUnitAll, getUnitById, postUnit, putUnit, delUnit } from '../services/unitService.js';
+import { getUnitAll, getUnitById, postUnit, putUnit, delUnit, getUnitSimpleAll } from '../services/unitService.js';
+
+export const getSimpleAll = async(_, res) => {
+    try{
+        const unit = await getUnitSimpleAll();
+        res.status(200).json(unit)
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
 
 export const getAll = async(_, res) => {
     try{

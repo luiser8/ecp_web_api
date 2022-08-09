@@ -2,6 +2,14 @@ import mongoose from 'mongoose';
 import '../config/database.js';
 import Category from '../models/category.js';
 
+export const getCategorySimpleAll = async () => {
+    try {
+        return await Category.find({}).select('name');
+    } catch (error) {
+        return error;
+    }
+};
+
 export const getCategoryAll = async() => {
     try{
         return await Category.find();

@@ -57,7 +57,7 @@ export const getMaterialSingleById = async (id) => {
 
 export const postMaterial = async (req) => {
     try {
-        const { category, unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, expiration_date, status } = req.body;
+        const { category, unit, supplier, code, name, description, entered_amount, purchase_price, expiration_date, status } = req.body;
 
         if (await Material.exists({ code })) {
             return `The code ${code} no repeat`;
@@ -65,9 +65,8 @@ export const postMaterial = async (req) => {
         if (await Material.exists({ name })) {
             return `The code ${name} no repeat`;
         }
-        if (!['in stock', 'on order', 'exhausted'].includes(status)) {
-            throw Error("Status enum value invalid");
-        }
+
+        const current_amount = entered_amount;
 
         const material = await Material.create({ category, unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, expiration_date, status });
 

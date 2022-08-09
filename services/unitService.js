@@ -2,6 +2,14 @@ import mongoose from 'mongoose';
 import '../config/database.js';
 import Unit from '../models/unit.js';
 
+export const getUnitSimpleAll = async () => {
+    try {
+        return await Unit.find({}).select('name');
+    } catch (error) {
+        return error;
+    }
+};
+
 export const getUnitAll = async() => {
     try{
         return await Unit.find();

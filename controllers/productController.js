@@ -43,9 +43,11 @@ export const getById = async(req, res) => {
 export const post = async(req, res) => {
     try{
         const { code, name, description, presentation, boxes_x_mix, units_x_mix, status } = req.body;
-        if (!(code, name, description, presentation, boxes_x_mix, units_x_mix, status)) {
+        if (!(code, name, description, presentation, boxes_x_mix, units_x_mix)) {
             return res.status(400).send("All input is required");
         }
+
+        status = "in process";
 
         const product = await postProduct(req);
 

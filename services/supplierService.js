@@ -2,6 +2,14 @@ import mongoose from 'mongoose';
 import '../config/database.js';
 import Supplier from '../models/supplier.js';
 
+export const getSuppliersSimpleAll = async () => {
+    try {
+        return await Supplier.find({}).select('type name');
+    } catch (error) {
+        return error;
+    }
+};
+
 export const getSuppliersAll = async() => {
     try{
         return await Supplier.find();

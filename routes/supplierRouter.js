@@ -1,9 +1,10 @@
 import express from 'express';
-import { getAll, getById, post, put, del } from '../controllers/supplierController.js';
+import { getAll, getById, post, put, del, getSimpleAll } from '../controllers/supplierController.js';
 import { auth } from '../middleware/auth.js';
 
 const supplierRouter = express.Router();
-supplierRouter.get('/', auth, getAll);
+supplierRouter.get('/', auth, getSimpleAll);
+supplierRouter.get('/all', auth, getAll);
 supplierRouter.get('/:id', auth, getById);
 supplierRouter.post('/', auth, post);
 supplierRouter.put('/:id', auth, put);
