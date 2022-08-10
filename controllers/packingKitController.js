@@ -1,4 +1,13 @@
-import { getPackingKitAll, getPackingKitById, postPackingKit, putPackingKit, delPackingKit, getPackingKitsExists } from '../services/packingKitService.js';
+import { getPackingKitAll, getPackingKitById, postPackingKit, putPackingKit, delPackingKit, getPackingKitsExists, getPackingKitsSimpleAll, getPackingKitsSingleById } from '../services/packingKitService.js';
+
+export const getSimpleAll = async(_, res) => {
+    try{
+        const packingKits = await getPackingKitsSimpleAll();
+        res.status(200).json(packingKits)
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
 
 export const getAll = async(_, res) => {
     try{
@@ -29,10 +38,29 @@ export const getPackingKitExists = async(req, res) => {
     }
 };
 
+export const getCurrentQtyById = async(req, res) => {
+    try{
+        let packingKitQtyError = {};
+        const { id, qty } = req.params;
+        const packingKit = await getPackingKitsSingleById(id);
+
+        packingKitQtyError = qty > packingKit.current_amount ? {
+            'msj': 'Quantity not passed',
+            'diference': packingKit.current_amount - qty
+        } : {
+            'msj': 'Quantity ok passed',
+            'diference': packingKit.current_amount - qty
+        };
+        res.status(200).json(packingKitQtyError);
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
+
 export const post = async(req, res) => {
     try{
-        const { unit, code, name, description, entered_amount, current_amount, purchase_price } = req.body;
-        if (!(unit, code, name, description, entered_amount, current_amount, purchase_price)) {
+        const { unit, supplier, code, name, description, entered_amount, current_amount, purchase_price , status } = req.body;
+        if (!(unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status)) {
             return res.status(400).send("All input is required");
         }
 

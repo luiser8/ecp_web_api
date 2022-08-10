@@ -61,8 +61,8 @@ export const getCurrentQtyById = async(req, res) => {
 
 export const post = async(req, res) => {
     try{
-        const { category, unit, supplier, code, name, description, entered_amount, expiration_date, status } = req.body;
-        if (!(category, unit, code, name, description, entered_amount, expiration_date, status)) {
+        const { unit, supplier, code, name, description, entered_amount, expiration_date, status } = req.body;
+        if (!(unit, code, name, description, entered_amount, expiration_date, status)) {
             return res.status(400).send("All input is required");
         }
 
@@ -71,7 +71,7 @@ export const post = async(req, res) => {
         if(unitExists === null){
             return res.status(404).send("The unit id not exists, is required");
         }
-
+ 
         if(supplier !== null){
             const supplierExists = await getSupplierById(supplier);
             if(supplierExists === null){
