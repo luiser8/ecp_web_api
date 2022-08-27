@@ -1,0 +1,38 @@
+[
+    {
+        "_id": "62dd45a3fb0513f089e7466f",
+        "code": "UN",
+        "name": "Unidad",
+        "status": true
+    },
+    {
+        "_id": "62dd45b0fb0513f089e74673",
+        "code": "KG",
+        "name": "Kilogramo",
+        "status": true
+    },
+    {
+        "_id": "62dd45bcfb0513f089e74677",
+        "code": "GR",
+        "name": "Gramo",
+        "status": true
+    },
+    {
+        "_id": "62dd45c7fb0513f089e7467b",
+        "code": "LI",
+        "name": "Libra",
+        "status": true
+    },
+    {
+        "_id": "62dd45e0fb0513f089e7467f",
+        "code": "LIT",
+        "name": "LItro",
+        "status": true
+    },
+    {
+        "_id": "62dd45eafb0513f089e74683",
+        "code": "GAL",
+        "name": "Galon",
+        "status": true
+    }
+]

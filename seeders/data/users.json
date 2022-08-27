@@ -1,0 +1,28 @@
+[
+    {
+        "_id": "62dd444e05b8d1583878e32h",
+        "role": "628ad792fd0bbe147abb6063",
+        "identifier": 19774643,
+        "firstname": "Yvanna",
+        "lastname": "Moreno",
+        "email": "ytanare1989@gmail.com",
+        "username": "yvanna",
+        "password": "$2a$10$eCmy8gG3LMxUKgN5//nj3OBzckK4uwF2jPXiT1fVzNRoLx76V6yvy",
+        "status": true,
+        "accesstoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJkZDQ0NGUwNWI4ZDE1ODM4NzhlMzJkIiwidXNlciI6Inl2YW5uYSIsImlhdCI6MTY1ODY2ODExMCwiZXhwIjoxNjU4NjkzMzEwfQ.O8SyXLMqY82Cfc4w1sZJueSSWIZGD_eEquI5kGO46h4",
+        "refreshtoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJkZDQ0NGUwNWI4ZDE1ODM4NzhlMzJkIiwidXNlciI6Inl2YW5uYSIsImlhdCI6MTY1ODY2ODExMCwiZXhwIjoxNjU4NjkzMzEwfQ.8VkyA_XUQZW4rTm8SJq_nNPSa3NVsMPI3GJw4uBugOE"
+    },
+    {
+        "_id": "62dd446e05b8d1583878e332",
+        "role": "628ad792fd0bbe147abb6063",
+        "identifier": 19651249,
+        "firstname": "Luis",
+        "lastname": "Rondon",
+        "email": "leduardo.rondon@gmail.com",
+        "username": "luiser",
+        "password": "$2a$10$r8pA8AArGBwr5B.UB62youjLF9XfLerKfEHdcg91ulLzCkmOVK7Hu",
+        "status": true,
+        "accesstoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJkZDQ0NmUwNWI4ZDE1ODM4NzhlMzMzIiwidXNlciI6Imx1aXNlciIsImlhdCI6MTY2MDUyMjg1MSwiZXhwIjoxNjYxMTI3NjUxfQ.0OjRiL05hTIruxhxQS7qavuWQpc_7v8QaL3L7xfhHYo",
+        "refreshtoken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjJkZDQ0NmUwNWI4ZDE1ODM4NzhlMzMzIiwidXNlciI6Imx1aXNlciIsImlhdCI6MTY2MDUyMjg1MSwiZXhwIjoxNjYxMTI3NjUxfQ.lSnUT8yQkZ-ovfHaOZzqs8yFsoGYJ51wh3Lr6gqaVmg"
+    }
+]
