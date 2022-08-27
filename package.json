@@ -23,11 +23,9 @@
     "express-jwt": "~7.7.5",
     "http-errors": "~2.0.0",
     "moment": "^2.29.4",
-    "qrcode": "^1.5.1",
-    "mongoose": "~6.5.1",
+    "mongoose": "~6.5.3",
     "morgan": "^1.10.0",
-    "mongo-seeding": "^3.7.2",
-    "apicache": "^1.6.3"
+    "qrcode": "^1.5.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
