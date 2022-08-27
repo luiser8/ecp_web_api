@@ -1,0 +1,23 @@
+[
+    {
+        "_id": "628ad792fd0bbe147abb6063",
+        "name": "Administrador",
+        "type": 1,
+        "description": "Role para Administradores del sistema",
+        "status": true
+    },
+    {
+        "_id": "62dd45bcfb0513f089e74678",
+        "name": "Invitado",
+        "type": 2,
+        "description": "Role para invitados",
+        "status": true
+    },
+    {
+        "_id": "62dd45c7fb0513f089e7467c",
+        "name": "Demo",
+        "type": 3,
+        "description": "Role para muestras del sistema",
+        "status": true
+    }
+]
