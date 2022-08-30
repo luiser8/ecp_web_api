@@ -1,4 +1,4 @@
-import { getMaterialsSimpleAll, getMaterialsAll, getMaterialById, getMaterialSingleById, postMaterial, putMaterial, delMaterial, getMaterialsExists } from '../services/materialService.js';
+import { getMaterialsSimpleAll, getMaterialsAll, getMaterialById, getMaterialSingleById, postMaterial, putMaterial, delMaterial, getMaterialsExists, getMaterialByProducts } from '../services/materialService.js';
 import { getUnitById } from '../services/unitService.js';
 import { getSupplierById } from '../services/supplierService.js';
 
@@ -40,6 +40,16 @@ export const getMaterialExists = async(req, res) => {
     }
 };
 
+export const getMaterialByProd = async(req, res) => {
+    try{
+        const { material } = req.params;
+        const materials = await getMaterialByProducts(material);
+        res.status(200).json(materials)
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
+
 export const getCurrentQtyById = async(req, res) => {
     try{
         let materialQtyError = {};
@@ -71,7 +81,7 @@ export const post = async(req, res) => {
         if(unitExists === null){
             return res.status(404).send("The unit id not exists, is required");
         }
- 
+
         if(supplier !== null){
             const supplierExists = await getSupplierById(supplier);
             if(supplierExists === null){

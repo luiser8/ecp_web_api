@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import '../config/database.js';
+import Product from '../models/product.js';
 import Material from '../models/material.js';
 import Supplier from '../models/supplier.js';
 import Unit from '../models/unit.js';
@@ -35,11 +36,11 @@ export const getMaterialById = async (id) => {
 
 export const getMaterialsExists = async (type, value) => {
     try {
-        if(type === "code"){
+        if (type === "code") {
             const material = await Material.exists({ code: value });
             return true ? material != null : false;
         }
-        if(type === "name"){
+        if (type === "name") {
             const material = await Material.exists({ name: value });
             return true ? material != null : false;
         }
@@ -51,6 +52,16 @@ export const getMaterialsExists = async (type, value) => {
 export const getMaterialSingleById = async (id) => {
     try {
         return await Material.findById({ _id: id });
+    } catch (error) {
+        return error;
+    }
+};
+
+export const getMaterialByProducts = async (material) => {
+    try {
+        return await Product
+            .find({ 'materials.material': material.toString() })
+            .select('code name presentation status createdAt');
     } catch (error) {
         return error;
     }
@@ -90,10 +101,10 @@ export const putMaterial = async (req) => {
         let new_current_amount = 0;
         let new_entered_amount = 0;
         const materialSingle = await getMaterialSingleById(id);
-        if(entered_amount !== materialSingle.entered_amount){
+        if (entered_amount !== materialSingle.entered_amount) {
             new_current_amount = entered_amount + materialSingle.current_amount;
             new_entered_amount = entered_amount + materialSingle.entered_amount;
-        }else{
+        } else {
             new_current_amount = materialSingle.current_amount;
             new_entered_amount = materialSingle.entered_amount;
         }
@@ -125,7 +136,7 @@ export const putMaterialDownCurrentQty = async (req) => {
                 Material.findByIdAndUpdate({ _id: material._id },
                     { current_amount: newCurrentAmount, in_use: true },
                     { new: true },
-                        (error, result) => result ? result : error);
+                    (error, result) => result ? result : error);
             });
         });
     } catch (error) {
@@ -147,7 +158,7 @@ export const putMaterialUpCurrentQty = async (req) => {
                 Material.findByIdAndUpdate({ _id: material._id },
                     { current_amount: newCurrentAmount, in_use: false },
                     { new: true },
-                        (error, result) => result ? result : error);
+                    (error, result) => result ? result : error);
             });
         });
     } catch (error) {
