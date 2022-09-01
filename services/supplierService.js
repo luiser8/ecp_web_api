@@ -26,6 +26,29 @@ export const getSupplierById = async(id) => {
     }
 };
 
+export const getSuppliersExists = async (type, value) => {
+    try {
+        if (type === "identifier") {
+            const supplier = await Supplier.exists({ identifier: value });
+            return true ? supplier != null : false;
+        }
+        if (type === "name") {
+            const supplier = await Supplier.exists({ name: value });
+            return true ? supplier != null : false;
+        }
+        if (type === "phone") {
+            const supplier = await Supplier.exists({ phone: value });
+            return true ? supplier != null : false;
+        }
+        if (type === "email") {
+            const supplier = await Supplier.exists({ email: value });
+            return true ? supplier != null : false;
+        }
+    } catch (error) {
+        return error;
+    }
+};
+
 export const postSupplier = async(req) => {
     try{
         const { identifier, type, name, description, email, phone, address } = req.body;
