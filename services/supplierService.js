@@ -75,16 +75,13 @@ export const postSupplier = async(req) => {
 export const putSupplier = async(req) => {
     try{
         const { id } = req.params;
-        const { identifier, type, name, description, email, phone, address } = req.body;
+        const { identifier, type, name, description, email, phone, address, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
         }
-        if (await Supplier.exists({identifier})) {
-            return `The identifier ${identifier} is not repit`;
-        }
 
-        const newSupplier = { identifier, type, name, description, email, phone, address, _id: id };
+        const newSupplier = { identifier, type, name, description, email, phone, address, status, _id: id };
 
         return await Supplier.findByIdAndUpdate(id, newSupplier, { new: true });
 
