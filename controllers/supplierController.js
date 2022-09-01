@@ -1,4 +1,4 @@
-import { getSuppliersAll, getSupplierById, postSupplier, putSupplier, delSupplier, getSuppliersSimpleAll } from '../services/supplierService.js';
+import { getSuppliersAll, getSupplierById, postSupplier, putSupplier, delSupplier, getSuppliersSimpleAll, getSuppliersExists } from '../services/supplierService.js';
 
 export const getSimpleAll = async(_, res) => {
     try{
@@ -22,6 +22,16 @@ export const getById = async(req, res) => {
     try{
         const { id } = req.params;
         const supplier = await getSupplierById(id);
+        res.status(200).json(supplier)
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
+
+export const getExists = async(req, res) => {
+    try{
+        const { type, value } = req.params;
+        const supplier = await getSuppliersExists(type, value);
         res.status(200).json(supplier)
     }catch(error){
         res.status(404).json({error:error.message});

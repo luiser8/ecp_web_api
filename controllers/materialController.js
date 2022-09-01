@@ -30,7 +30,7 @@ export const getById = async(req, res) => {
     }
 };
 
-export const getMaterialExists = async(req, res) => {
+export const getExists = async(req, res) => {
     try{
         const { type, value } = req.params;
         const material = await getMaterialsExists(type, value);
@@ -40,7 +40,7 @@ export const getMaterialExists = async(req, res) => {
     }
 };
 
-export const getMaterialByProd = async(req, res) => {
+export const getByProd = async(req, res) => {
     try{
         const { material } = req.params;
         const materials = await getMaterialByProducts(material);
