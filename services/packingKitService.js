@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import '../config/database.js';
 import PackingKit from '../models/packing_kit.js';
+import Product from '../models/product.js';
 import Supplier from '../models/supplier.js';
 import Unit from '../models/unit.js';
 
@@ -56,9 +57,19 @@ export const getPackingKitsSingleById = async (id) => {
     }
 };
 
+export const getPackingKitsByProducts = async (kit) => {
+    try {
+        return await Product
+            .find({ 'packing_kits.packing_kit': kit.toString() })
+            .select('code name presentation status createdAt');
+    } catch (error) {
+        return error;
+    }
+};
+
 export const postPackingKit = async (req) => {
     try {
-        const { unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status } = req.body;
+        const { unit, supplier, code, name, description, entered_amount, purchase_price, status } = req.body;
 
         if (await PackingKit.exists({ code })) {
             return `The code ${code} no repeat`;
@@ -66,6 +77,8 @@ export const postPackingKit = async (req) => {
         if (await PackingKit.exists({ name })) {
             return `The identifier ${name} no repeat`;
         }
+
+        const current_amount = entered_amount;
 
         const packingKit = await PackingKit.create({ unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status });
 

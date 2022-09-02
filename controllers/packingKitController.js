@@ -1,4 +1,6 @@
-import { getPackingKitAll, getPackingKitById, postPackingKit, putPackingKit, delPackingKit, getPackingKitsExists, getPackingKitsSimpleAll, getPackingKitsSingleById } from '../services/packingKitService.js';
+import { getPackingKitAll, getPackingKitById, postPackingKit, putPackingKit, delPackingKit, getPackingKitsExists, getPackingKitsSimpleAll, getPackingKitsSingleById, getPackingKitsByProducts } from '../services/packingKitService.js';
+import { getUnitById } from '../services/unitService.js';
+import { getSupplierById } from '../services/supplierService.js';
 
 export const getSimpleAll = async(_, res) => {
     try{
@@ -57,11 +59,34 @@ export const getCurrentQtyById = async(req, res) => {
     }
 };
 
+export const getByProd = async(req, res) => {
+    try{
+        const { packingkit } = req.params;
+        const packingKits = await getPackingKitsByProducts(packingkit);
+        res.status(200).json(packingKits);
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
+
 export const post = async(req, res) => {
     try{
-        const { unit, supplier, code, name, description, entered_amount, current_amount, purchase_price , status } = req.body;
-        if (!(unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status)) {
+        const { unit, supplier, code, name, description, entered_amount, purchase_price , status } = req.body;
+        if (!(unit, supplier, code, name, description, entered_amount, purchase_price, status)) {
             return res.status(400).send("All input is required");
+        }
+
+        const unitExists = await getUnitById(unit);
+
+        if(unitExists === null){
+            return res.status(404).send("The unit id not exists, is required");
+        }
+
+        if(supplier !== null){
+            const supplierExists = await getSupplierById(supplier);
+            if(supplierExists === null){
+                return res.status(404).send("The supplier id not exists, is required");
+            }
         }
 
         const packingKit = await postPackingKit(req);
