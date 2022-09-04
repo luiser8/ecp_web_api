@@ -30,7 +30,7 @@ export const getById = async(req, res) => {
     }
 };
 
-export const getPackingKitExists = async(req, res) => {
+export const getExists = async(req, res) => {
     try{
         const { type, value } = req.params;
         const packingKit = await getPackingKitsExists(type, value);
