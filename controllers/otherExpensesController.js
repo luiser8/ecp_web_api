@@ -1,4 +1,4 @@
-import { getOtherExpensesAll, getOtherExpensesById, postOtherExpenses, putOtherExpenses, delOtherExpenses } from '../services/otherExpensesService.js';
+import { getOtherExpensesAll, getOtherExpensesById, postOtherExpenses, putOtherExpenses, delOtherExpenses, getOtherExpensesExists, getOtherExpensesByProducts } from '../services/otherExpensesService.js';
 
 export const getAll = async(_, res) => {
     try{
@@ -19,10 +19,30 @@ export const getById = async(req, res) => {
     }
 };
 
+export const getExists = async(req, res) => {
+    try{
+        const { type, value } = req.params;
+        const otherExpenses = await getOtherExpensesExists(type, value);
+        res.status(200).json(otherExpenses)
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
+
+export const getByProd = async(req, res) => {
+    try{
+        const { others } = req.params;
+        const otherExpenses = await getOtherExpensesByProducts(others);
+        res.status(200).json(otherExpenses);
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
+
 export const post = async(req, res) => {
     try{
-        const { unit, name, description } = req.body;
-        if (!(unit, name, description)) {
+        const { name, description } = req.body;
+        if (!(name, description)) {
             return res.status(400).send("All input is required");
         }
 
