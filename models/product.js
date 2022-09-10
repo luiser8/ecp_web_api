@@ -51,7 +51,6 @@ const productSchema = mongoose.Schema({
                 ref: "OtherExpenses",
                 require: false
             },
-            inc: { type: Number, required: false, set(v) { return v.toFixed(2); } },
             total_cost_demanded: { type: Number, required: false, set(v) { return v.toFixed(2); } },
             cost_x_box: { type: Number, required: false, set(v) { return v.toFixed(2); } },
             cost_x_unit: { type: Number, required: false, set(v) { return v.toFixed(4); } },
@@ -87,6 +86,13 @@ const productSchema = mongoose.Schema({
         }
     ],
     total_x_others_expenses: [
+        {
+            total_cost_demanded: { type: Number, required: false, set(v) { return v.toFixed(2); } },
+            total_cost_x_box: { type: Number, required: false, set(v) { return v.toFixed(2); } },
+            total_cost_x_unit: { type: Number, required: false, set(v) { return v.toFixed(4); } },
+        }
+    ],
+    total_x_materials_packing_kits_others_expenses: [
         {
             total_cost_demanded: { type: Number, required: false, set(v) { return v.toFixed(2); } },
             total_cost_x_box: { type: Number, required: false, set(v) { return v.toFixed(2); } },

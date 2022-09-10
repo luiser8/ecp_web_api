@@ -8,8 +8,10 @@ import { calculations_materials } from '../middleware/calculations_materials.js'
 import { checkNotRepitMaterial, checkNotRepitPackingKits } from '../helpers/checkHelper.js';
 import { qrCodeHelper } from '../helpers/qrCodeHelper.js';
 import { calculations_kits } from '../middleware/calculations_kits.js';
+import { calculations_others_expenses } from '../middleware/calculations_others_expenses.js';
 import { putMaterialUpCurrentQty } from './materialService.js';
 import { putPackingKitUpCurrentQty } from './packingKitService.js';
+import OtherExpenses from '../models/other_expenses.js';
 
 export const getProductsSimpleAll = async () => {
     try {
@@ -76,6 +78,13 @@ export const getProductById = async (id) => {
                         populate: { path: "unit", model: Unit, select: "code" }
                     }
                 ]
+            })
+            .populate({
+                path: "others_expenses", populate: [
+                    {
+                        path: "other_expenses", model: OtherExpenses, select: "code name"
+                    }
+                ]
             });
     } catch (error) {
         return error;
@@ -84,7 +93,7 @@ export const getProductById = async (id) => {
 
 export const postProduct = async (req) => {
     try {
-        const { code, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, status } = req.body;
+        const { code, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, others_expenses, status } = req.body;
 
         if (await Product.exists({ code })) {
             return `The code ${code} no repeat`;
@@ -129,6 +138,19 @@ export const postProduct = async (req) => {
             }
         );
 
+        const {
+            others_expenses_calc,
+            total_oe_cost_demanded,
+            total_oe_cost_x_box,
+            total_oe_cost_x_unit,
+        } = calculations_others_expenses(
+            {
+                total_cost_x_box: total_m_cost_x_box + total_pk_cost_x_box,
+                total_cost_x_unit: total_m_cost_x_unit + total_pk_cost_x_unit,
+                others_expenses: others_expenses !== undefined ? others_expenses : [],
+            }
+        );
+
         const product = await Product.create(
             {
                 code,
@@ -143,6 +165,7 @@ export const postProduct = async (req) => {
                 pvp_x_units,
                 materials: materials !== undefined ? materials_calc : materials,
                 packing_kits: packing_kits !== undefined ? packings_kits_calc : packing_kits,
+                others_expenses: others_expenses !== undefined ? others_expenses_calc : others_expenses,
                 total_x_materials: materials !== undefined ? {
                     total_qty_x_mix: total_m_qty_x_mix,
                     total_cost_x_mix: total_m_cost_x_mix,
@@ -165,6 +188,16 @@ export const postProduct = async (req) => {
                     total_cost_x_box: total_m_cost_x_box + total_pk_cost_x_box,
                     total_qty_x_unit: total_m_qty_x_unit + total_pk_qty_x_unit,
                     total_cost_x_unit: total_m_cost_x_unit + total_pk_cost_x_unit
+                } : undefined,
+                total_x_others_expenses: others_expenses !== undefined ? {
+                    total_cost_demanded: total_oe_cost_demanded,
+                    total_cost_x_box: total_oe_cost_x_box,
+                    total_cost_x_unit: total_oe_cost_x_unit
+                } : undefined,
+                total_x_materials_packing_kits_others_expenses: packing_kits !== undefined ? {
+                    total_cost_demanded: total_oe_cost_demanded,
+                    total_cost_x_box: total_m_cost_x_box + total_pk_cost_x_box + total_oe_cost_x_box,
+                    total_cost_x_unit: total_m_cost_x_unit + total_pk_cost_x_unit + total_oe_cost_x_unit
                 } : undefined,
                 status
             }

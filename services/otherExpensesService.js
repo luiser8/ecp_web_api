@@ -5,7 +5,7 @@ import Product from '../models/product.js';
 
 export const getOtherExpensesAll = async() => {
     try{
-        return await OtherExpenses.find();
+        return await OtherExpenses.find({});
     }catch(error){
         return error;
     }
@@ -21,6 +21,10 @@ export const getOtherExpensesById = async(id) => {
 
 export const getOtherExpensesExists = async (type, value) => {
     try {
+        if(type === "code"){
+            const otherExpenses = await OtherExpenses.exists({ code: value });
+            return true ? otherExpenses != null : false;
+        }
         if(type === "name"){
             const otherExpenses = await OtherExpenses.exists({ name: value });
             return true ? otherExpenses != null : false;
@@ -42,13 +46,17 @@ export const getOtherExpensesByProducts = async (other) => {
 
 export const postOtherExpenses = async(req) => {
     try{
-        const { name, description } = req.body;
+        const { code, name, description } = req.body;
 
-        if (await OtherExpenses.exists({name})) {
-            return `The identifier ${name} is not repit`;
+        if (await OtherExpenses.exists({code})) {
+            return `The identifier ${code} is not repit`;
         }
 
-        const otherExpenses = await OtherExpenses.create({name, description});
+        if (await OtherExpenses.exists({name})) {
+            return `The name ${name} is not repit`;
+        }
+
+        const otherExpenses = await OtherExpenses.create({code, name, description});
 
         return await otherExpenses.save();
 
@@ -60,13 +68,13 @@ export const postOtherExpenses = async(req) => {
 export const putOtherExpenses = async(req) => {
     try{
         const { id } = req.params;
-        const { name, description, status } = req.body;
+        const { code, name, description, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
         }
 
-        const newOtherExpenses = { name, description, status, _id: id };
+        const newOtherExpenses = { code, name, description, status, _id: id };
 
         return await OtherExpenses.findByIdAndUpdate(id, newOtherExpenses, { new: true });
 
