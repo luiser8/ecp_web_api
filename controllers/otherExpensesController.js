@@ -41,8 +41,8 @@ export const getByProd = async(req, res) => {
 
 export const post = async(req, res) => {
     try{
-        const { name, description } = req.body;
-        if (!(name, description)) {
+        const { code, name, description } = req.body;
+        if (!(code, name, description)) {
             return res.status(400).send("All input is required");
         }
 
