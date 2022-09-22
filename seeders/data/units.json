@@ -25,13 +25,13 @@
     },
     {
         "_id": "62dd45e0fb0513f089e7467f",
-        "code": "LIT",
+        "code": "LT",
         "name": "LItro",
         "status": true
     },
     {
         "_id": "62dd45eafb0513f089e74683",
-        "code": "GAL",
+        "code": "GL",
         "name": "Galon",
         "status": true
     }

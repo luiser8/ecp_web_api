@@ -1,6 +1,7 @@
 import { getProductsSimpleAll, getProductsExists, getProductsAll, getProductById, postProduct, putProduct, delProduct } from '../services/productService.js';
 import { putMaterialDownCurrentQty } from '../services/materialService.js';
 import { putPackingKitDownCurrentQty } from '../services/packingKitService.js';
+import { getUnitById } from '../services/unitService.js';
 
 export const getSimpleAll = async(_, res) => {
     try{
@@ -42,9 +43,15 @@ export const getById = async(req, res) => {
 
 export const post = async(req, res) => {
     try{
-        const { code, name, description, presentation, boxes_x_mix, units_x_mix } = req.body;
-        if (!(code, name, description, presentation, boxes_x_mix, units_x_mix)) {
+        const { code, unit, name, description, presentation, boxes_x_mix, units_x_mix } = req.body;
+        if (!(code, unit, name, description, presentation, boxes_x_mix, units_x_mix)) {
             return res.status(400).send("All input is required");
+        }
+
+        const unitExists = await getUnitById(unit);
+
+        if(unitExists === null){
+            return res.status(404).send("The unit id not exists, is required");
         }
 
         const product = await postProduct(req);
