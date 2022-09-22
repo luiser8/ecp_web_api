@@ -15,6 +15,7 @@ import supplierRouter from './routes/supplierRouter.js';
 import categoryRouter from './routes/categoryRouter.js';
 import packingKitRouter from './routes/packingKitRouter.js';
 import otherExpensesRouter from './routes/otherExpensesRouter.js';
+import requirementsRouter from './routes/requirementsRouter.js';
 
 //Express inicializacion
 const app = express();
@@ -46,6 +47,7 @@ app.use('/api/v1/supplier/', supplierRouter);
 app.use('/api/v1/category/', categoryRouter);
 app.use('/api/v1/packingkit/', packingKitRouter);
 app.use('/api/v1/otherexpenses/', otherExpensesRouter);
+app.use('/api/v1/requirements/', requirementsRouter);
 app.get('/', (_, res) => {
     res.render('index', { error: false, message:'API ECP web.' })
 });

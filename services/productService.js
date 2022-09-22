@@ -40,6 +40,9 @@ export const getProductsAll = async () => {
     try {
         return await Product.find({})
             .populate({
+                path: "unit", model: Unit, select: "code name"
+            })
+            .populate({
                 path: "materials", populate: [
                     {
                         path: "material", model: Material, select: "code name",
@@ -54,6 +57,13 @@ export const getProductsAll = async () => {
                         populate: { path: "unit", model: Unit, select: "code" }
                     }
                 ]
+            })
+            .populate({
+                path: "others_expenses", populate: [
+                    {
+                        path: "other_expenses", model: OtherExpenses, select: "code name"
+                    }
+                ]
             });
     } catch (error) {
         return error;
@@ -63,6 +73,9 @@ export const getProductsAll = async () => {
 export const getProductById = async (id) => {
     try {
         return await Product.findById({ _id: id })
+            .populate({
+                path: "unit", model: Unit, select: "code name"
+            })
             .populate({
                 path: "materials", populate: [
                     {
@@ -93,7 +106,7 @@ export const getProductById = async (id) => {
 
 export const postProduct = async (req) => {
     try {
-        const { code, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, others_expenses, status } = req.body;
+        const { code, unit, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, others_expenses, status } = req.body;
 
         if (await Product.exists({ code })) {
             return `The code ${code} no repeat`;
@@ -154,6 +167,7 @@ export const postProduct = async (req) => {
         const product = await Product.create(
             {
                 code,
+                unit,
                 qr_code,
                 name,
                 description,
@@ -213,7 +227,7 @@ export const postProduct = async (req) => {
 export const putProduct = async (req) => {
     try {
         const { id } = req.params;
-        const { code, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, status } = req.body;
+        const { code, unit, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
@@ -229,10 +243,10 @@ export const putProduct = async (req) => {
         }
 
         let materialsLocal = materials !== undefined ? materials : [];
-        let materialsOld = [];
+        const materialsOld = [];
 
         let packing_kitsLocal = packing_kits !== undefined ? packing_kits : [];
-        let packing_kitsOld = [];
+        const packing_kitsOld = [];
 
         await getProductById(id).then(item => {
             if (materials !== undefined) {
@@ -329,6 +343,7 @@ export const putProduct = async (req) => {
         const newProduct =
         {
             code,
+            unit,
             name,
             description,
             presentation,

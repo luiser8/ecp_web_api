@@ -25,7 +25,7 @@
     "express-jwt": "~7.7.5",
     "http-errors": "~2.0.0",
     "moment": "^2.29.4",
-    "mongoose": "~6.6.0",
+    "mongoose": "~6.6.1",
     "morgan": "^1.10.0",
     "qrcode": "^1.5.1"
   },
