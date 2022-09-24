@@ -26,15 +26,26 @@ export const getCategoryById = async(id) => {
     }
 };
 
+export const getCategoryExists = async (type, value) => {
+    try {
+        if (type === "name") {
+            const category = await Category.exists({ name: value });
+            return true ? category != null : false;
+        }
+    } catch (error) {
+        return error;
+    }
+};
+
 export const postCategory = async(req) => {
     try{
-        const { name, description } = req.body;
+        const { name, description, dad } = req.body;
 
         if (await Category.exists({name})) {
             return `The identifier ${name} is not repit`;
         }
 
-        const category = await Category.create({name, description});
+        const category = await Category.create({name, description, dad});
 
         return await category.save();
 
@@ -46,16 +57,13 @@ export const postCategory = async(req) => {
 export const putCategory = async(req) => {
     try{
         const { id } = req.params;
-        const { name, description } = req.body;
+        const { name, description, dad, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
         }
-        if (await Category.exists({name})) {
-            return `The identifier ${name} is not repit`;
-        }
 
-        const newCategory = { name, description, _id: id };
+        const newCategory = { name, description, dad, status, _id: id };
 
         return await Category.findByIdAndUpdate(id, newCategory, { new: true });
 

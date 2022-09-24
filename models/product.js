@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const productSchema = mongoose.Schema({
     code: { type: String, unique: true, required: true },
+    category: {type: mongoose.Schema.Types.ObjectId, ref: "Category", require: true},
     unit: {type: mongoose.Schema.Types.ObjectId, ref: "Unit", require: true},
     qr_code: { type: String, required: false },
     name: { type: String, required: true, max: 155 },
