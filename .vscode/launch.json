@@ -12,7 +12,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/index.js",
-            "runtimeExecutable": "/home/luiser8/.nvm/versions/node/v16.17.0/bin/node"
+            "runtimeExecutable": "/home/luiser8/.nvm/versions/node/v16.17.1/bin/node"
         }
     ]
 }
