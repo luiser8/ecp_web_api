@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import '../config/database.js';
+import Category from '../models/category.js';
 import PackingKit from '../models/packing_kit.js';
 import Product from '../models/product.js';
 import Supplier from '../models/supplier.js';
@@ -8,7 +9,8 @@ import Unit from '../models/unit.js';
 export const getPackingKitsSimpleAll = async () => {
     try {
         return await PackingKit.find({})
-            .populate({ path: "unit", model: Unit, select: "code" });
+            .populate({ path: "unit", model: Unit, select: "code" })
+            .populate({ path: "category", model: Category, select: "name" });
     } catch (error) {
         return error;
     }
@@ -18,7 +20,8 @@ export const getPackingKitAll = async () => {
     try {
         return await PackingKit.find({})
             .populate({ path: "supplier", model: Supplier })
-            .populate({ path: "unit", model: Unit });
+            .populate({ path: "unit", model: Unit })
+            .populate({ path: "category", model: Category, select: "name" });
     } catch (error) {
         return error;
     }
@@ -28,7 +31,8 @@ export const getPackingKitById = async (id) => {
     try {
         return await PackingKit.findById({ _id: id })
             .populate({ path: "supplier", model: Supplier, select: "name" })
-            .populate({ path: "unit", model: Unit, select: "code name" });
+            .populate({ path: "unit", model: Unit, select: "code name" })
+            .populate({ path: "category", model: Category, select: "name" });
     } catch (error) {
         return error;
     }
@@ -69,7 +73,7 @@ export const getPackingKitsByProducts = async (kit) => {
 
 export const postPackingKit = async (req) => {
     try {
-        const { unit, supplier, code, name, description, entered_amount, purchase_price, status } = req.body;
+        const { unit, category, supplier, code, name, description, entered_amount, purchase_price, status } = req.body;
 
         if (await PackingKit.exists({ code })) {
             return `The code ${code} no repeat`;
@@ -80,7 +84,7 @@ export const postPackingKit = async (req) => {
 
         const current_amount = entered_amount;
 
-        const packingKit = await PackingKit.create({ unit, supplier, code, name, description, entered_amount, current_amount, purchase_price, status });
+        const packingKit = await PackingKit.create({ unit, category, supplier, code, name, description, entered_amount, current_amount, purchase_price, status });
 
         return await packingKit.save();
 
@@ -92,7 +96,7 @@ export const postPackingKit = async (req) => {
 export const putPackingKit = async (req) => {
     try {
         const { id } = req.params;
-        const { unit, supplier, code, name, description, entered_amount, purchase_price, status } = req.body;
+        const { unit, category, supplier, code, name, description, entered_amount, purchase_price, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
@@ -113,7 +117,7 @@ export const putPackingKit = async (req) => {
             return `Status enum value invalid`;
         }
 
-        const newPackingKit = { unit, supplier, code, name, description, entered_amount: new_entered_amount, current_amount: new_current_amount, purchase_price, status, _id: id };
+        const newPackingKit = { unit, category, supplier, code, name, description, entered_amount: new_entered_amount, current_amount: new_current_amount, purchase_price, status, _id: id };
 
         return await PackingKit.findByIdAndUpdate(id, newPackingKit, { new: true });
 

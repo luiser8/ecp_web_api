@@ -26,6 +26,14 @@ export const getCategoryById = async(id) => {
     }
 };
 
+export const getCategoryByDad = async(dad) => {
+    try{
+        return await Category.find({ dad }).select('name');
+    }catch(error){
+        return error;
+    }
+};
+
 export const getCategoryExists = async (type, value) => {
     try {
         if (type === "name") {

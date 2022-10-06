@@ -1,6 +1,7 @@
 import { getPackingKitAll, getPackingKitById, postPackingKit, putPackingKit, delPackingKit, getPackingKitsExists, getPackingKitsSimpleAll, getPackingKitsSingleById, getPackingKitsByProducts } from '../services/packingKitService.js';
 import { getUnitById } from '../services/unitService.js';
 import { getSupplierById } from '../services/supplierService.js';
+import { getCategoryById } from '../services/categoryService.js';
 
 export const getSimpleAll = async(_, res) => {
     try{
@@ -71,15 +72,20 @@ export const getByProd = async(req, res) => {
 
 export const post = async(req, res) => {
     try{
-        const { unit, supplier, code, name, description, entered_amount, purchase_price , status } = req.body;
-        if (!(unit, supplier, code, name, description, entered_amount, purchase_price, status)) {
+        const { unit, category, supplier, code, name, description, entered_amount, purchase_price , status } = req.body;
+        if (!(unit, category, supplier, code, name, description, entered_amount, purchase_price, status)) {
             return res.status(400).send("All input is required");
         }
 
         const unitExists = await getUnitById(unit);
+        const categoryExists = await getCategoryById(category);
 
         if(unitExists === null){
             return res.status(404).send("The unit id not exists, is required");
+        }
+
+        if(categoryExists === null){
+            return res.status(404).send("The category id not exists, is required");
         }
 
         if(supplier !== null){
