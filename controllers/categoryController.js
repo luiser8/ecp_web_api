@@ -1,4 +1,4 @@
-import { getCategoryAll, getCategoryById, postCategory, putCategory, delCategory, getCategorySimpleAll, getCategoryExists } from '../services/categoryService.js';
+import { getCategoryAll, getCategoryById, postCategory, putCategory, delCategory, getCategorySimpleAll, getCategoryExists, getCategoryByDad } from '../services/categoryService.js';
 
 export const getSimpleAll = async(_, res) => {
     try{
@@ -22,6 +22,16 @@ export const getById = async(req, res) => {
     try{
         const { id } = req.params;
         const category = await getCategoryById(id);
+        res.status(200).json(category)
+    }catch(error){
+        res.status(404).json({error:error.message});
+    }
+};
+
+export const getByDad = async(req, res) => {
+    try{
+        const { dad } = req.params;
+        const category = await getCategoryByDad(dad);
         res.status(200).json(category)
     }catch(error){
         res.status(404).json({error:error.message});

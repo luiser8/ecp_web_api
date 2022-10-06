@@ -1,3 +1,4 @@
+import { getCategoryById } from '../services/categoryService.js';
 import { getOtherExpensesAll, getOtherExpensesById, postOtherExpenses, putOtherExpenses, delOtherExpenses, getOtherExpensesExists, getOtherExpensesByProducts } from '../services/otherExpensesService.js';
 
 export const getAll = async(_, res) => {
@@ -41,9 +42,15 @@ export const getByProd = async(req, res) => {
 
 export const post = async(req, res) => {
     try{
-        const { code, name, description } = req.body;
-        if (!(code, name, description)) {
+        const { code, category, name, description } = req.body;
+        if (!(code, category, name, description)) {
             return res.status(400).send("All input is required");
+        }
+
+        const categoryExists = await getCategoryById(category);
+
+        if(categoryExists === null){
+            return res.status(404).send("The category id not exists, is required");
         }
 
         const otherExpenses = await postOtherExpenses(req);

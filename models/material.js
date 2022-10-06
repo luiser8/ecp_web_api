@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 const materialSchema = mongoose.Schema({
     unit: {type: mongoose.Schema.Types.ObjectId, ref: "Unit", require: true},
+    category: {type: mongoose.Schema.Types.ObjectId, ref: "Category", require: true},
     supplier: {type: mongoose.Schema.Types.ObjectId, ref: "Supplier", require: false},
     code: {type: String, unique: true, required: true},
     name: {type: String, required: true, max: 155},

@@ -12,10 +12,12 @@ import { calculations_others_expenses } from '../middleware/calculations_others_
 import { putMaterialUpCurrentQty } from './materialService.js';
 import { putPackingKitUpCurrentQty } from './packingKitService.js';
 import OtherExpenses from '../models/other_expenses.js';
+import Category from '../models/category.js';
 
 export const getProductsSimpleAll = async () => {
     try {
-        return await Product.find({}).select('code name presentation status createdAt');
+        return await Product.find({}).select('code category name presentation status createdAt')
+                .populate({ path: "category", model: Category, select: "name" });
     } catch (error) {
         return error;
     }
@@ -42,6 +44,7 @@ export const getProductsAll = async () => {
             .populate({
                 path: "unit", model: Unit, select: "code name"
             })
+            .populate({ path: "category", model: Category, select: "name" })
             .populate({
                 path: "materials", populate: [
                     {
@@ -76,6 +79,7 @@ export const getProductById = async (id) => {
             .populate({
                 path: "unit", model: Unit, select: "code name"
             })
+            .populate({ path: "category", model: Category, select: "name" })
             .populate({
                 path: "materials", populate: [
                     {
@@ -106,7 +110,7 @@ export const getProductById = async (id) => {
 
 export const postProduct = async (req) => {
     try {
-        const { code, unit, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, others_expenses, status } = req.body;
+        const { code, category, unit, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, others_expenses, status } = req.body;
 
         if (await Product.exists({ code })) {
             return `The code ${code} no repeat`;
@@ -167,6 +171,7 @@ export const postProduct = async (req) => {
         const product = await Product.create(
             {
                 code,
+                category,
                 unit,
                 qr_code,
                 name,
@@ -227,7 +232,7 @@ export const postProduct = async (req) => {
 export const putProduct = async (req) => {
     try {
         const { id } = req.params;
-        const { code, unit, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, status } = req.body;
+        const { code, category, unit, name, description, presentation, boxes_x_mix, units_x_mix, margin_of_gain, pvp_x_boxes, pvp_x_units, materials, packing_kits, status } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return `The id ${id} is not valid`;
@@ -343,6 +348,7 @@ export const putProduct = async (req) => {
         const newProduct =
         {
             code,
+            category,
             unit,
             name,
             description,

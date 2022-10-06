@@ -1,19 +1,19 @@
 import '../config/database.js';
+import Category from '../models/category.js';
 import Product from '../models/product.js';
 import Unit from '../models/unit.js';
 
 export const getRequirementsAll = async () => {
     try {
         const requirements = await Product.find({})
-            .select('code unit name boxes_x_mix units_x_mix margin_of_gain pvp_x_boxes pvp_x_units total_x_materials status createdAt')
-            .populate({
-                path: "unit", model: Unit, select: "code name"
-            })
+            .select('code category unit name boxes_x_mix units_x_mix margin_of_gain pvp_x_boxes pvp_x_units total_x_materials status createdAt')
+            .populate({ path: "unit", model: Unit, select: "code name" })
+            .populate({ path: "category", model: Category, select: "name" });
 
         const response = [];
 
         requirements.map((_, index) => {
-            const { code, name, unit, boxes_x_mix, units_x_mix, total_x_materials } = requirements[index];
+            const { code, category, name, unit, boxes_x_mix, units_x_mix, total_x_materials } = requirements[index];
 
             const {
                 total_qty_x_box,
@@ -28,6 +28,7 @@ export const getRequirementsAll = async () => {
 
             response.push({
                 "code": code,
+                "category": category,
                 "name": name,
                 "unit": unit.code,
                 "boxes_x_mix": boxes_x_mix,
