@@ -1,4 +1,4 @@
-import { getUsersAll, getUserById, loginUser, postUser, putUser, delUser } from '../services/userService.js';
+import { getUsersAll, getUserById, loginUser, postUser, putUser, delUser, loginRefreshUser } from '../services/userService.js';
 
 export const getAll = async(_, res) => {
     try{
@@ -57,6 +57,25 @@ export const login = async(req, res) => {
         }
 
         const user = await loginUser(req);
+        if(user === "Invalid Credentials"){
+            res.status(200).send(user);
+        }else{
+            res.status(200).json(user);
+        }
+
+    }catch(error){
+        res.status(409).json({error:error.message});
+    }
+};
+
+export const loginRefresh = async(req, res) => {
+    try{
+        const { refreshtoken } = req.body;
+        if (!(refreshtoken)) {
+            res.status(400).send("All input is required");
+        }
+
+        const user = await loginRefreshUser(refreshtoken);
         if(user === "Invalid Credentials"){
             res.status(200).send(user);
         }else{
